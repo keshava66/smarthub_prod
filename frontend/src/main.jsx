@@ -6,6 +6,12 @@ import { EventType } from '@azure/msal-browser'
 import { MsalProvider } from '@azure/msal-react'
 import { msalInstance } from './config/msalInstance'
 import { installApiAuth } from './utils/apiAuth'
+import { hardwareTier } from './utils/perfTier'
+import './pages/dataApi/dataApi.lite.css'
+
+// "lite" on machines without a graphics card; the Data API page uses it to
+// drop its costly blur effects there (see dataApi.lite.css)
+document.documentElement.dataset.fx = hardwareTier();
 
 // Every call to the backend carries the signed-in user's token
 installApiAuth();

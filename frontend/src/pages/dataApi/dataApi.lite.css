@@ -1,0 +1,49 @@
+/* Machines with no graphics card (most cloud PCs) draw everything on the CPU.
+   There, the frosted-glass blur behind the panels is redrawn on every frame
+   while the background glows drift underneath, which is what makes the page
+   stutter. On those machines (html[data-fx="lite"], set in main.jsx):
+   - panels and overlays lose the blur and get a more solid fill, so they
+     look the same without the per-frame cost
+   - the glows keep moving, but without the 60px blur filter (their gradient
+     already fades to nothing) and on their own layer, so moving them is a
+     cheap slide instead of a repaint
+   Every animation stays. */
+
+html[data-fx="lite"] .dax .capsule,
+html[data-fx="lite"] .dax .pal,
+html[data-fx="lite"] .dax .side2,
+html[data-fx="lite"] .dax .urlbar,
+html[data-fx="lite"] .dax .tbar,
+html[data-fx="lite"] .dax .drawer-bg,
+html[data-fx="lite"] .dax .launch2,
+html[data-fx="lite"] .dax .hcard,
+html[data-fx="lite"] .dax .mbg {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-fx="lite"] .dax .capsule { background: rgba(255, 255, 255, .95); }
+html[data-fx="lite"] .dax .side2   { background: rgba(255, 255, 255, .95); }
+html[data-fx="lite"] .dax .urlbar  { background: rgba(255, 255, 255, .97); }
+html[data-fx="lite"] .dax .tbar    { background: rgba(248, 246, 244, .97); }
+html[data-fx="lite"] .dax .launch2 { background: rgba(248, 246, 244, .97); }
+html[data-fx="lite"] .dax .hcard   { background: #fff; }
+html[data-fx="lite"] .dax .pal,
+html[data-fx="lite"] .dax .mbg     { background: rgba(49, 44, 42, .45); }
+html[data-fx="lite"] .dax .drawer-bg { background: rgba(49, 44, 42, .4); }
+
+html[data-fx="lite"] .dax .home .glow1,
+html[data-fx="lite"] .dax .home .glow2,
+html[data-fx="lite"] .dax .home .glow3,
+html[data-fx="lite"] .dax .wsmain .g1,
+html[data-fx="lite"] .dax .wsmain .g2 {
+  filter: none;
+  will-change: transform;
+}
+html[data-fx="lite"] .dax .home .glow1 { background: radial-gradient(circle, rgba(235, 23, 0, .14), transparent 72%); }
+html[data-fx="lite"] .dax .home .glow2 { background: radial-gradient(circle, rgba(15, 104, 178, .1), transparent 72%); }
+html[data-fx="lite"] .dax .home .glow3 { background: radial-gradient(circle, rgba(140, 59, 187, .07), transparent 72%); }
+html[data-fx="lite"] .dax .wsmain .g1  { background: radial-gradient(circle, rgba(235, 23, 0, .12), transparent 72%); }
+html[data-fx="lite"] .dax .wsmain .g2  { background: radial-gradient(circle, rgba(15, 104, 178, .08), transparent 72%); }
+
+html[data-fx="lite"] .dax .bgimg { will-change: transform; }
