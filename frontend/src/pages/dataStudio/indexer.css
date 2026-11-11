@@ -516,7 +516,7 @@ button.ih-hrow:hover { background: rgba(110,98,89,.035); }
 
 /* ── overlays ── */
 
-.ih-layer { position: relative; z-index: 60; font-family: var(--text); color: var(--ink); }
+.ih-layer { position: relative; z-index: 95; /* above the Data API drawer (71) */  font-family: var(--text); color: var(--ink); }
 .ih-scrim { position: fixed; inset: 0; z-index: 60; background: rgba(49,44,42,.4); display: flex; justify-content: center; align-items: flex-start; padding: 13vh 12px 12px; animation: ihFade .2s ease both; overflow: auto; }
 .ih-modal { width: min(680px, 100%); max-height: calc(100vh - 13vh - 24px); display: flex; flex-direction: column; border-radius: 20px; background: #fff; box-shadow: 0 40px 90px -30px rgba(49,44,42,.6); overflow: hidden; animation: ihPop .35s var(--ease) both; }
 .ih-modal.sm { width: min(460px, 100%); }
