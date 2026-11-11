@@ -28,7 +28,8 @@ const ROLE_DEFINITIONS = {
       manageUsers: true,
       manageRoles: true,
       runBDCOperations: true,
-      viewBDCSuperuser: true
+      viewBDCSuperuser: true,
+      manageDataAPIExports: true
     }
   },
   dqe_righttime_superuser: {

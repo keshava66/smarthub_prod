@@ -59,6 +59,12 @@ const PERMISSION_GROUPS = [
     ],
   },
   {
+    key: 'manageDataAPIExports',
+    label: 'Data API Export',
+    description: 'Publish tables as APIs, manage keys and watch their usage',
+    children: [],
+  },
+  {
     key: 'viewAudit',
     label: 'Audit Log',
     description: 'Access to audit log',
@@ -654,6 +660,7 @@ export default function UserManagement() {
     viewBusinessChecks: false,
     runBDCOperations: false,
     viewBDCSuperuser: false,
+    manageDataAPIExports: false,
     viewAudit: false,
     viewUserManagement: false,
     manageUsers: false,
@@ -1128,6 +1135,7 @@ export default function UserManagement() {
       viewBusinessChecks: false,
       runBDCOperations: false,
       viewBDCSuperuser: false,
+      manageDataAPIExports: false,
       viewAudit: false,
       viewUserManagement: false,
       manageUsers: false,
