@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useIsAuthenticated } from "@azure/msal-react";
 import { AuthProvider } from "./context/AuthContext";
@@ -14,10 +14,67 @@ import Dashboard from "./pages/Dashboard";
 import DQEngine from "./pages/DQEngine";
 import UserManagement from "./pages/UserManagement";
 import AuditPage from "./pages/AuditPage";
+import LoadingSpinner from "./pages/components/LoadingSpinner";
+import { lazyPage } from "./utils/lazyPage";
 
-// Big pages, loaded the first time someone opens them
-const DataAPIExport = lazy(() => import("./pages/dataApi/DataAPIExport"));
-const DataApiTableView = lazy(() => import("./pages/dataApi/DataApiTableView"));
+// Big pages, loaded the first time someone opens them. After a release an old
+// tab reloads once by itself to pick up the new files.
+const DataAPIExport = lazyPage(() => import("./pages/dataApi/DataAPIExport"), "/data-api");
+const DataApiTableView = lazyPage(() => import("./pages/dataApi/DataApiTableView"), "/data-api-view");
+
+// Spinner while a page downloads. Waits a moment so a fast load never flashes it.
+const PageLoading = () => {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setShow(true), 200);
+    return () => clearTimeout(t);
+  }, []);
+  if (!show) return null;
+  return (
+    <div className="flex items-center justify-center h-full min-h-[50vh]" role="status" aria-label="Loading page">
+      <LoadingSpinner />
+    </div>
+  );
+};
+
+// A page that couldn't be downloaded shows a reload button instead of a blank screen
+class PageLoadBoundary extends React.Component {
+  state = { error: null };
+
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+
+  componentDidCatch(error) {
+    console.error("Page failed to load:", error);
+  }
+
+  render() {
+    if (!this.state.error) return this.props.children;
+    return (
+      <div className="flex items-center justify-center h-full min-h-[50vh]" role="alert">
+        <div className="text-center max-w-sm px-6">
+          <p className="text-jj-gray-08 font-johnson-display font-bold text-lg">This page didn't load</p>
+          <p className="mt-2 text-sm text-jj-gray-07 font-johnson-text">Check your connection and try again.</p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="mt-5 px-5 py-2 rounded-lg bg-jj-red text-white font-johnson-display font-bold text-sm hover:opacity-90"
+          >
+            Reload
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
+
+// Lazy page with its spinner and failure screen
+const LazyPage = ({ children }) => (
+  <PageLoadBoundary>
+    <Suspense fallback={<PageLoading />}>{children}</Suspense>
+  </PageLoadBoundary>
+);
 
 // Wraps a route element with a permission check.
 // Waits for both auth AND RBAC to finish loading before deciding — prevents a refresh
@@ -35,9 +92,9 @@ const DataApiTableViewGate = () => (
   <SessionTimeoutProvider>
     <RBACProvider>
       <PermissionRoute permission="manageDataAPIExports">
-        <Suspense fallback={null}>
+        <LazyPage>
           <DataApiTableView />
-        </Suspense>
+        </LazyPage>
       </PermissionRoute>
     </RBACProvider>
   </SessionTimeoutProvider>
@@ -106,9 +163,9 @@ const AppLayoutInner = () => {
               path="/data-api"
               element={
                 <PermissionRoute permission="manageDataAPIExports">
-                  <Suspense fallback={null}>
+                  <LazyPage>
                     <DataAPIExport />
-                  </Suspense>
+                  </LazyPage>
                 </PermissionRoute>
               }
             />
