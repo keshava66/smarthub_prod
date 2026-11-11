@@ -1,0 +1,328 @@
+{
+  "_comment": "Copy this to backend/dq_config.json and fill it in. dq_config.json is gitignored. Sections marked optional can be left out entirely - the feature that reads them just reports itself as unconfigured. Required at startup: denodo_service_account, snowflake, scripts.",
+
+  "denodo_service_account": {
+    "username": "svc_denodo_user",
+    "password": "",
+    "base_url": "https://denodo.example.com:9443"
+  },
+
+  "snowflake": {
+    "account": "abc12345.us-east-1",
+    "user": "SVC_SMARTHUB",
+    "private_key_path": "C:/keys/smarthub_rsa_key.p8",
+    "private_key_password": "",
+    "role": "SMARTHUB_RO",
+    "warehouse": "SMARTHUB_WH",
+    "database": "DQ_DB",
+    "schema": "PUBLIC",
+    "table_name": "IT_VALIDATION_RESULTS"
+  },
+
+  "scripts": {
+    "script_dir": "C:/PycharmProjects/dqe/DQ_IT_Validation",
+    "python_path": "C:/PycharmProjects/dqe/backend/venv/Scripts/python.exe"
+  },
+
+  "ad_groups": {
+    "admin": "SMARTHUB-ADMIN",
+    "dqe_righttime_superuser": "SMARTHUB-DQE-SUPERUSER",
+    "it_viewer": "SMARTHUB-DQE-IT"
+  },
+
+  "cors_origins": [
+    "http://localhost:3000",
+    "https://smarthub.example.com"
+  ],
+
+  "_comment_api_keys": "Optional. Machine-to-machine callers (cron jobs, the email report scripts). Each key is checked against ALL_PERMISSIONS in auth.py.",
+  "api_keys": {
+    "dqe-report-cron": {
+      "key": "replace-with-a-long-random-string",
+      "permissions": ["runITChecks", "runBDCOperations"]
+    }
+  },
+
+  "_comment_ind_cta_dq": "Optional - IND/CTA Data Quality page. Uses the Data Studio (snowflake_query_runner) login and tries each of its roles until one can read the view. role pins a role, conn_id picks a numbered login, login=bdc uses the Business Checks login, or give account/user/private_key_path for a separate login.",
+  "ind_cta_dq": {
+    "table": "\"PRD_RND_INTEGRATED_DATA_DW\".\"L3__RDH_MDM_PUBLISH\".\"VW_MDM_DQ_HIST__L3__RDH_MDM_PUBLISH\"",
+    "role": "",
+    "cache_seconds": 300
+  },
+
+  "_comment_oracle": "Optional - IT checks only. 'oracle_connections' is keyed by target database; 'oracle' is the single legacy fallback.",
+  "oracle_connections": {
+    "PRD": {
+      "user": "dq_reader",
+      "password": "",
+      "dsn": "oracle-prd.example.com:1521/PRDPDB"
+    },
+    "QA": {
+      "user": "dq_reader",
+      "password": "",
+      "dsn": "oracle-qa.example.com:1521/QAPDB"
+    }
+  },
+  "oracle": {
+    "user": "dq_reader",
+    "password": "",
+    "dsn": "oracle-prd.example.com:1521/PRDPDB"
+  },
+
+  "_comment_validation": "Optional. Columns skipped everywhere in source-to-target comparison (audit columns and the like).",
+  "validation": {
+    "excluded_columns": ["ETL_LOAD_DATE", "ETL_BATCH_ID", "DW_INSERT_TS"]
+  },
+
+  "_comment_bdc": "Optional - Business Defined Checks. Snowflake connection plus the table/view names the DQ engine reads. 'schema' holds the rule registry and its views. 'core_schema' holds what a run produces - the per-rule failed-row tables and DQ_REVIEW_REGISTRY - and 'stg_schema' the archived snapshots of past runs; both were hard-coded as DQ_CORE and DQ_STG and still default to those names, so leaving them out changes nothing. The email report scripts read 'core_schema' from here too. 'business_defined_checks_write' is only needed when writes go to a different role/account; it falls back to the read section. 'date_input_table' is the table the Superuser DQ Date Input forms edit; 'date_range_table_fqn' (fully qualified) is where the page header reads the active range from. Point both at the same table if the header should change as soon as a range is saved.",
+  "business_defined_checks": {
+    "account": "abc12345.us-east-1",
+    "user": "SVC_BDC_RO",
+    "private_key_path": "C:/keys/bdc_rsa_key.p8",
+    "private_key_password": "",
+    "role": "BDC_RO",
+    "warehouse": "BDC_WH",
+    "database": "DQ_DB",
+    "schema": "BDC",
+    "core_schema": "DQ_CORE",
+    "stg_schema": "DQ_STG",
+    "rule_registry_table": "RULE_REGISTRY",
+    "rule_input_table": "RULE_INPUT",
+    "rule_latest_view": "V_RULE_LATEST",
+    "rule_health_view": "V_RULE_HEALTH",
+    "rule_trends_view": "V_RULE_TRENDS",
+    "date_input_table": "DQ_DATE_INPUT",
+    "date_range_table_fqn": "DQ_DB.DQ_CORE.DQ_DATE_INPUT__L1__DQ_CORE"
+  },
+  "business_defined_checks_write": {
+    "account": "abc12345.us-east-1",
+    "user": "SVC_BDC_RW",
+    "private_key_path": "C:/keys/bdc_rw_rsa_key.p8",
+    "private_key_password": "",
+    "role": "BDC_RW",
+    "warehouse": "BDC_WH",
+    "database": "DQ_DB",
+    "schema": "BDC"
+  },
+
+  "_comment_unstructured": "Optional - Unstructured Explorer and GRA Data Domains both read this Snowflake connection.",
+  "unstructured": {
+    "account": "abc12345.us-east-1",
+    "user": "SVC_RIMDOCS_RO",
+    "private_key_path": "C:/keys/rimdocs_rsa_key.p8",
+    "private_key_password": "",
+    "role": "RIMDOCS_RO",
+    "warehouse": "RIMDOCS_WH",
+    "database": "RIMDOCS_DB",
+    "schema": "PUBLIC",
+    "virtual_regulator_table": "DEV_RAW.UNSTRUCTURED_EXPLORER.SUBX_FINAL",
+    "immbot_table": "DEV_RAW.UNSTRUCTURED_EXPLORER.IMMBOT_FINAL",
+    "vr_external_table": "DEV_RAW.UNSTRUCTURED_EXPLORER.FDA_PRESS_RELEASE_RSS",
+    "vr_external_sources": [
+        { "id": "CANADA_GAZETTE", "label": "FDA CANADA_GAZETTE", "table": "DEV_RAW.FDA_RSS.CANADA_GAZETTE", "order_by": "PUBDATE" },
+        { "id": "CANADIAN_THERAPEUTICS", "label": "FDA CANADIAN_THERAPEUTICS", "table": "DEV_RAW.FDA_RSS.CANADIAN_THERAPEUTICS", "order_by": "PUBLISHED" },
+        { "id": "CANADIAN_THERAPEUTICS_COMPLI_CONFORM_ENG_XML", "label": "FDA CANADIAN_THERAPEUTICS_COMPLI_CONFORM_ENG_XML", "table": "DEV_RAW.FDA_RSS.CANADIAN_THERAPEUTICS_COMPLI_CONFORM_ENG_XML", "order_by": "PUBLISHED" },
+        { "id": "CANADIAN_THERAPEUTICS_DEVICES_INSTRUMENTS_ENG_XML", "label": "FDA CANADIAN_THERAPEUTICS_DEVICES_INSTRUMENTS_ENG_XML", "table": "DEV_RAW.FDA_RSS.CANADIAN_THERAPEUTICS_DEVICES_INSTRUMENTS_ENG_XML", "order_by": "PUBLISHED" },
+        { "id": "CANADIAN_THERAPEUTICS_NEW_NEUF_ENG_XML", "label": "FDA CANADIAN_THERAPEUTICS_NEW_NEUF_ENG_XML", "table": "DEV_RAW.FDA_RSS.CANADIAN_THERAPEUTICS_NEW_NEUF_ENG_XML", "order_by": "PUBLISHED" },
+        { "id": "CANADIAN_THERAPEUTICS_PROD_ENG_XML", "label": "FDA CANADIAN_THERAPEUTICS_PROD_ENG_XML", "table": "DEV_RAW.FDA_RSS.CANADIAN_THERAPEUTICS_PROD_ENG_XML", "order_by": "PUBLISHED" },
+        { "id": "FDA_DRUG_NEWS", "label": "FDA_DRUG_NEWS", "table": "DEV_RAW.FDA_RSS.FDA_DRUG_NEWS", "order_by": "PUBDATE" },
+        { "id": "FDA_DRUG_NEWS_BIOLOGICS", "label": "FDA_DRUG_NEWS_BIOLOGICS", "table": "DEV_RAW.FDA_RSS.FDA_DRUG_NEWS_BIOLOGICS", "order_by": "PUBDATE" },
+        { "id": "FDA_FEED", "label": "FDA_FEED", "table": "DEV_RAW.FDA_RSS.FDA_FEED", "order_by": "PUBDATE" },
+        { "id": "FDA_FEED_EN_LS_ENG_XML", "label": "FDA_FEED_EN_LS_ENG_XML", "table": "DEV_RAW.FDA_RSS.FDA_FEED_EN_LS_ENG_XML", "order_by": "PUBDATE" },
+        { "id": "FDA_GUIDANCE", "label": "FDA_GUIDANCE", "table": "DEV_RAW.FDA_RSS.FDA_GUIDANCE", "order_by": "PUBDATE" },
+        { "id": "HEALTHY_CANADIANS", "label": "FDA HEALTHY_CANADIANS", "table": "DEV_RAW.FDA_RSS.HEALTHY_CANADIANS", "order_by": "PUBDATE" },
+        { "id": "NA_GOVINFO", "label": "FDA NA_GOVINFO", "table": "DEV_RAW.FDA_RSS.NA_GOVINFO", "order_by": "PUBDATE" },
+        { "id": "NA_NIST", "label": "FDA NA_NIST", "table": "DEV_RAW.FDA_RSS.NA_NIST", "order_by": "PUBDATE" },
+        { "id": "US_FEDERAL_REGISTER", "label": "FDA US_FEDERAL_REGISTER", "table": "DEV_RAW.FDA_RSS.US_FEDERAL_REGISTER", "order_by": "PUBDATE" },
+        { "id": "HEALTHY_CANADIANS", "label": "FDA HEALTHY_CANADIANS", "table": "DEV_RAW.FDA_RSS.HEALTHY_CANADIANS", "order_by": "PUBDATE" },
+        { "id": "US_FEDERAL_REGISTER_DRUG_ENFORCEMENT_ADMINISTRATION", "label": "FDA US_FEDERAL_REGISTER_DRUG_ENFORCEMENT_ADMINISTRATION", "table": "DEV_RAW.FDA_RSS.US_FEDERAL_REGISTER_DRUG_ENFORCEMENT_ADMINISTRATION", "order_by": "PUBDATE" },
+        { "id": "US_FEDERAL_REGISTER_FOOD_AND_DRUG_ADMINISTRATION", "label": "FDA US_FEDERAL_REGISTER_FOOD_AND_DRUG_ADMINISTRATION", "table": "DEV_RAW.FDA_RSS.US_FEDERAL_REGISTER_FOOD_AND_DRUG_ADMINISTRATION", "order_by": "PUBDATE" },
+        { "id": "US_FEDERAL_REGISTER_HEALTH_AND_HUMAN_SERVICES_DEPARTMENT", "label": "FDA US_FEDERAL_REGISTER_HEALTH_AND_HUMAN_SERVICES_DEPARTMENT", "table": "DEV_RAW.FDA_RSS.US_FEDERAL_REGISTER_HEALTH_AND_HUMAN_SERVICES_DEPARTMENT", "order_by": "PUBDATE" },
+        { "id": "US_FEDERAL_REGISTER_NATIONAL_LIBRARY_OF_MEDICINE", "label": "FDA US_FEDERAL_REGISTER_NATIONAL_LIBRARY_OF_MEDICINE", "table": "DEV_RAW.FDA_RSS.US_FEDERAL_REGISTER_NATIONAL_LIBRARY_OF_MEDICINE", "order_by": "TITLE" },
+        { "id": "US_FEDERAL_REGISTER_REAGAN_UDALL_FOUNDATION_FOR_THE_FOOD_AND_DRUG_ADMINISTRATION", "label": "FDA US_FEDERAL_REGISTER_REAGAN_UDALL_FOUNDATION_FOR_THE_FOOD_AND_DRUG_ADMINISTRATION", "table": "DEV_RAW.FDA_RSS.US_FEDERAL_REGISTER_REAGAN_UDALL_FOUNDATION_FOR_THE_FOOD_AND_DRUG_ADMINISTRATION", "order_by": "TITLE" }
+      ]
+},
+
+  "_comment_pgqr": "Optional - Postgres Query Runner, the ePOD / NIPO / FDA / HAQ explorers and Data Studio's Postgres tab. Every plain key also reads from a PGQR_* env var. Data Studio's Postgres tab can offer several logins: numbered keys (host_1, port_1, user_1, password_1, default_database_1, sslmode_1, allow_writes_1, label_1, then _2, _3...) each make one entry in the worksheet's connection dropdown, and keys without a number are shared by all of them. With numbered users the dropdown lists only those, so delete them if you have one login. Keep the plain host / user / password either way: the other tabs only read those. allow_writes false makes a login read-only; default_schema is where unqualified names resolve.",
+  "postgres_query_runner": {
+    "host": "postgres.example.com",
+    "port": 5432,
+    "user": "dq_reader",
+    "password": "",
+    "default_database": "rimdocs",
+    "maintenance_database": "postgres",
+    "sslmode": "prefer",
+    "connect_timeout_seconds": 10,
+    "statement_timeout_seconds": 300,
+    "max_statement_timeout_seconds": 3600,
+    "max_concurrent_jobs": 6,
+    "job_ttl_seconds": 2700,
+    "allow_writes": true,
+    "default_schema": "public",
+
+    "host_1": "postgres.example.com",
+    "user_1": "dq_reader",
+    "password_1": "",
+    "default_database_1": "rimdocs",
+    "label_1": "dq_reader (default)",
+
+    "host_2": "postgres.example.com",
+    "user_2": "dq_readonly",
+    "password_2": "",
+    "default_database_2": "rimdocs",
+    "allow_writes_2": false,
+    "label_2": "Read only",
+
+    "host_3": "postgres-reporting.example.com",
+    "port_3": 5432,
+    "user_3": "report_user",
+    "password_3": "",
+    "default_database_3": "reports",
+    "label_3": "Reporting server"
+  },
+
+  "_comment_sfqr": "Optional - Data Studio (Snowflake pane). Anything left out falls back to the 'snowflake' section above, so a minimal setup can be just allow_writes. Use either password or private_key_path, not both. The nested 'sqrn_write' block is only for deployments where reads and writes are two different logins - leave it out and everything runs on the one login, as before. When it is present, the Table Copier browses target databases with it and writes with it; if that login cannot read the source, the copier moves the rows through the portal instead of running a single INSERT inside Snowflake (clone is not possible in that case). Credentials in 'sqrn_write' are taken as a set: name a password or a private_key_path there and only those are used. Several logins and roles for worksheets: numbered keys (user_1, private_key_1 or password_1, private_key_password_1, roles_1, role_1, warehouse_1, database_1, schema_1, account_1, allow_writes_1, label_1, then _2, _3...) each make one entry in the worksheet's connection dropdown; keys without a number are shared. roles_N fills the role dropdown and its first role is where a worksheet starts; leave it out to list every role the login has. A key file given as a bare name is looked up in private_key_path_base; a shared private_key_password covers every key that has no private_key_password_N. If a user has both a key and a password, the key is used. With only numbered users, user 1 is also the Table Copier's read login. Delete the numbered keys if you have one login.",
+  "snowflake_query_runner": {
+    "account": "abc12345.us-east-1",
+    "user": "SVC_SMARTHUB",
+    "password": "",
+    "private_key_path": "C:/keys/smarthub_rsa_key.p8",
+    "private_key_password": "",
+    "role": "SMARTHUB_RW",
+    "warehouse": "SMARTHUB_WH",
+    "database": "DQ_DB",
+    "schema": "PUBLIC",
+    "statement_timeout_seconds": 300,
+    "max_statement_timeout_seconds": 3600,
+    "max_concurrent_jobs": 6,
+    "job_ttl_seconds": 2700,
+    "login_timeout_seconds": 30,
+    "copy_timeout_seconds": 14400,
+    "allow_writes": true,
+    "label": "SmartHub service",
+    "roles": ["SMARTHUB_RW", "SMARTHUB_READ"],
+    "private_key_path_base": "C:/keys",
+
+    "user_1": "SVC_SMARTHUB",
+    "private_key_1": "smarthub_rsa_key.p8",
+    "private_key_password_1": "",
+    "roles_1": ["SMARTHUB_RW", "SMARTHUB_READ"],
+    "warehouse_1": "SMARTHUB_WH",
+    "label_1": "SmartHub service",
+
+    "user_2": "SVC_LOADER",
+    "private_key_2": "loader_rsa_key.p8",
+    "private_key_password_2": "",
+    "roles_2": ["LOADER"],
+    "warehouse_2": "LOAD_WH",
+    "label_2": "Loader",
+
+    "sqrn_write": {
+      "user": "SVC_SMARTHUB_WRITE",
+      "password": "",
+      "private_key_path": "",
+      "private_key_password": "",
+      "role": "SMARTHUB_TARGET_RW",
+      "warehouse": "SMARTHUB_WH",
+      "database": "",
+      "schema": ""
+    }
+  },
+
+  "_comment_communications": "Communication Center - admin email to portal users. Every key is optional; the values below are the built-in defaults. allowed_domains [] means any domain. Sent attachments are copied to backend/communication_attachments/ so a scheduled send can find them and a resend does not need them re-uploaded - set store_attachments false to keep only the filename, and attachment_retention_days 0 to keep the files forever. Scheduled send times are read as Eastern.",
+  "communications": {
+    "smtp_host": "localhost",
+    "smtp_port": 25,
+    "smtp_timeout": 60,
+    "sender": "donotreply@gra-smarthub-dqe.jnj.com",
+    "reply_to": "",
+    "default_cc": ["email@its.jnj.com", "email@its.jnj.com"],
+    "allowed_domains": ["jnj.com", "its.jnj.com"],
+    "max_recipients": 500,
+    "max_attachment_mb": 10,
+    "max_attachments": 5,
+    "logo_path": "",
+    "logo_width": 190,
+    "store_attachments": true,
+    "attachment_retention_days": 90,
+    "max_schedule_days": 90,
+    "scheduler_poll_seconds": 30,
+    "tenant_id": "",
+    "sensitivity_method": "Privileged",
+    "sensitivity_content_bits": 9,
+    "default_sensitivity": "",
+    "sensitivity_guids": {
+      "general-business": "",
+      "restricted-none": "",
+      "restricted-encrypt": "",
+      "highly-restricted-encrypt": "",
+      "highly-restricted-no-forward": ""
+    }
+  },
+  "_comment_s3": "Optional - S3 Explorer tab on the Data Studio page. ONE set of credentials: fill in the top-level keys and 'buckets' and leave 'accounts' out. MORE THAN ONE: leave the top-level credential keys and 'buckets' blank and list each credential set under 'accounts' - the top-level then only supplies shared defaults (region, endpoint_url, the size caps, allow_writes/allow_presign). Either way, leaving the credential keys empty with no accounts uses the host's instance/task role. 'buckets' is an allow-list; empty means every bucket those credentials can list. Uploads and deletes stay off unless allow_writes is true. 'search_scan_cap' is the ceiling for the search screen's slider - a user can dial their search below it but never above.",
+  "s3_explorer": {
+    "region": "us-east-1",
+    "access_key_id": "",
+    "secret_access_key": "",
+    "session_token": "",
+    "profile": "",
+    "endpoint_url": "",
+    "buckets": [],
+    "allow_writes": false,
+    "allow_presign": true,
+    "presign_expiry_seconds": 900,
+    "preview_max_bytes": 524288,
+    "document_preview_max_bytes": 33554432,
+    "inline_preview_max_bytes": 62914560,
+    "max_upload_bytes": 268435456,
+    "search_scan_cap": 2000000,
+
+    "_comment_accounts": "One entry per credential set. Anything an entry leaves out falls back to the top-level values above, except the credentials: an account that names its own access_key_id uses that pair exactly, and one that names none borrows the top-level pair. 'name' is what the sidebar groups by and what the URL carries, so keep it short and stable. Delete this whole key if there is only one set of credentials.",
+    "accounts": [
+      {
+        "name": "DEV",
+        "region": "us-east-1",
+        "access_key_id": "",
+        "secret_access_key": "",
+        "session_token": "",
+        "buckets": ["itx-bjv-rddlx-dev"],
+        "allow_writes": false,
+        "allow_presign": true
+      },
+      {
+        "name": "PROD",
+        "region": "us-east-1",
+        "access_key_id": "",
+        "secret_access_key": "",
+        "session_token": "",
+        "buckets": ["itx-bjv-rddlx-prod"],
+        "allow_writes": false,
+        "allow_presign": true
+      }
+    ]
+  },
+  "_comment_streamsets": "StreamSets Extractor (Data Studio tab). Browsing uses these credentials directly; extraction runs DQ_IT_Validation/Streamsets/Simplified_extractor.py (script_path defaults to scripts.script_dir/Streamsets/Simplified_extractor.py, python_path to scripts.python_path). That Python needs requests and paramiko. The same username/password are used for SSH to the data collectors.",
+  "streamsets_extractor": {
+    "url": "https://your-controlhub.example.com",
+    "username": "",
+    "password": "",
+    "verify_ssl": false,
+    "ca_bundle": "",
+    "request_timeout": 30,
+    "script_path": "",
+    "python_path": "",
+    "thread_pool_size": 5,
+    "max_pipelines_per_run": 25,
+    "max_concurrent_runs": 2,
+    "run_timeout_seconds": 1800
+  },
+
+  "_comment_data_shuttle": "Optional - Data Shuttle (Data Studio tab). Copies tables between Postgres and Snowflake either way. It reuses the logins above: Snowflake reads with snowflake_query_runner and writes with its sqrn_write block (or the same login if there is none), statements may run for copy_timeout_seconds; Postgres uses postgres_query_runner (pick the connection on the page when there are numbered ones). Both sides must have allow_writes on for the side being written. Files are staged under the Snowflake user stage (@~/data_shuttle) and in work_dir on the portal server (default: the system temp folder); a copy will not start with less than min_free_disk_gb free there. Copy history is saved to the portal database (shuttle_jobs); if that database cannot be reached, the history waits in work_dir/history_pending and is retried (3 quick tries, then every 30 minutes 3 times, then hourly) until it saves or someone aborts it on the page - so point work_dir at a folder that is not wiped on reboot if that matters. max_concurrent_jobs copies run at once, the rest queue. max_pg_connections and max_sf_connections are hard caps on connections the shuttle holds open, counted separately; a table waits for free connections rather than going over, and its workers are cut down to fit the lower cap (each worker needs one connection on each side, plus one main connection per side). Minimum 2 each.",
+  "data_shuttle": {
+    "work_dir": "",
+    "min_free_disk_gb": 5,
+    "max_concurrent_jobs": 2,
+    "max_pg_connections": 16,
+    "max_sf_connections": 16
+  }
+}

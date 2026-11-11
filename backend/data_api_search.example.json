@@ -1,0 +1,85 @@
+{
+  "_comment": "Copy to data_api_search.json (or set DATA_API_SEARCH_CONFIG). Reloaded automatically when the file changes; an invalid edit is logged and the previous config keeps serving (see GET /data-api/runtime/status). Table/column names below are placeholders: replace with the real RIM docs chunk and HAQ tables. Credentials are env var NAMES, never values.",
+
+  "embedding_models": {
+    "rimdocs-embed": {
+      "provider": "azure_openai",
+      "deployment": "text-embedding-3-small",
+      "dimensions": 1536,
+      "endpoint_env": "AZURE_OPENAI_EMBED_ENDPOINT",
+      "api_key_env": "AZURE_OPENAI_EMBED_API_KEY",
+      "api_version_env": "AZURE_OPENAI_EMBED_API_VERSION",
+      "query_prefix": "",
+      "send_dimensions": false
+    }
+  },
+
+  "tables": [
+    {
+      "source_system": "postgresql",
+      "database": "regulatory",
+      "schema": "vector_embedding",
+      "table": "rimdocs_chunks",
+
+      "embeddings": { "embedding": "rimdocs-embed" },
+      "vector_column": "embedding",
+      "metric": "cosine",
+
+      "text_column": "chunk_text",
+      "text_search_config": "english",
+      "require_text_index": true,
+
+      "default_mode": "hybrid",
+      "rrf_k": 60,
+      "dense_weight": 1.0,
+      "sparse_weight": 1.0,
+      "candidate_pool": 50,
+
+      "lookups": {
+        "doc": {
+          "schema": "vector_embedding",
+          "table": "rimdocs_chunk_source",
+          "key": "chunk_source_id",
+          "on": "chunk_source_id"
+        }
+      },
+
+      "response": {
+        "matches_key": "matches",
+        "fields": {
+          "chunk_id": "chunk_id",
+          "chunk_source_id": "chunk_source_id",
+          "chunk_number": "chunk_number",
+          "page_number": "page_number",
+          "chunk_text": "chunk_text",
+          "document_id": "document_id"
+        },
+        "objects": {
+          "rimdocs_metadata": {
+            "object_name": "doc.object_name",
+            "artifact_name": "doc.artifact_name",
+            "jj_component_name": "doc.jj_component_name",
+            "jj_compound_asset": "doc.jj_compound_asset",
+            "jj_prod_disp_name": "doc.jj_prod_disp_name",
+            "jj_product_class": "doc.jj_product_class",
+            "jj_application_type": "doc.jj_application_type",
+            "jj_region_country": "doc.jj_region_country",
+            "languages": "doc.languages",
+            "a_status": "doc.a_status",
+            "r_version_label": "doc.r_version_label",
+            "approved_date": "doc.approved_date"
+          },
+          "document_metadata": {
+            "indication": "doc.indication",
+            "indication_code": "doc.indication_code",
+            "application_type": "doc.application_type",
+            "application_number": "doc.application_number",
+            "protocol_number": "doc.protocol_number",
+            "title": "doc.title",
+            "introduction": "doc.introduction"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+-- Business Defined Checks datasets given to one person on top of their roles.-- Role datasets live in the role definition json (rbac_custom_roles).ALTER TABLE rbac_user_permissions ADD COLUMN datasets json NOT NULL DEFAULT '[]';

@@ -1,0 +1,5 @@
+# Optional: enables the Data API MCP endpoint (DATA_API_MCP_ENABLED=1).
+# Requires Pydantic 2 / Starlette >= 1.x. Kept out of requirements.txt so
+# deployments that do not use MCP are unaffected.
+# mcp 2.x renamed FastMCP to MCPServer; data_api_mcp.py targets 2.x.
+mcp>=2.2,<3

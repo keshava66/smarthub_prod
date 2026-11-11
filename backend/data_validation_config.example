@@ -1,0 +1,194 @@
+; Each source can have per-environment sections: [source], [source.dev],
+; [source.qa], [source.prod]. A plain [source] section (no suffix) is used
+; as the fallback for any environment that doesn't have its own section —
+; so if all envs share the same DB, just use [source] and skip the rest.
+
+[insight7.dev]
+user = CHANGE_ME
+password = CHANGE_ME
+dsn = dev-host.example.com:1521/SERVICE_NAME
+
+[insight7.qa]
+user = CHANGE_ME
+password = CHANGE_ME
+dsn = qa-host.example.com:1521/SERVICE_NAME
+
+[insight7.prod]
+user = CHANGE_ME
+password = CHANGE_ME
+dsn = prod-host.example.com:1521/SERVICE_NAME
+
+; RIMDocs — same connector as Oracle above (also an Oracle database), just a
+; separate section since it's a different instance/schema with its own creds.
+[rimdocs.dev]
+user = CHANGE_ME
+password = CHANGE_ME
+dsn = dev-rimdocs-host.example.com:1521/SERVICE_NAME
+
+[rimdocs.qa]
+user = CHANGE_ME
+password = CHANGE_ME
+dsn = qa-rimdocs-host.example.com:1521/SERVICE_NAME
+
+[rimdocs.prod]
+user = CHANGE_ME
+password = CHANGE_ME
+dsn = prod-rimdocs-host.example.com:1521/SERVICE_NAME
+
+[postgresql.dev]
+host = dev-host.example.com
+port = 5432
+user = CHANGE_ME
+password = CHANGE_ME
+
+[postgresql.qa]
+host = qa-host.example.com
+port = 5432
+user = CHANGE_ME
+password = CHANGE_ME
+
+[postgresql.prod]
+host = prod-host.example.com
+port = 5432
+user = CHANGE_ME
+password = CHANGE_ME
+
+[docubridge.dev]
+host = CHANGE_ME
+port = 5432
+user = CHANGE_ME
+password = CHANGE_ME
+; maintenance_database = lnzaws1226
+
+[docubridge.qa]
+host = CHANGE_ME
+port = 5432
+user = CHANGE_ME
+password = CHANGE_ME
+
+[docubridge.prod]
+host = CHANGE_ME
+port = 5432
+user = CHANGE_ME
+password = CHANGE_ME
+
+[denodo.dev]
+driver_jar = /path/to/denodo-vdp-jdbcdriver.jar
+driver_class = com.denodo.vdp.jdbc.Driver
+jdbc_url = jdbc:denodo://dev-host.example.com:9999/database
+user = CHANGE_ME
+password = CHANGE_ME
+; Optional — only used if live JDBC catalog introspection fails:
+; known_tables = VIEW_ONE, VIEW_TWO, VIEW_THREE
+
+[denodo.qa]
+driver_jar = /path/to/denodo-vdp-jdbcdriver.jar
+driver_class = com.denodo.vdp.jdbc.Driver
+jdbc_url = jdbc:denodo://qa-host.example.com:9999/database
+user = CHANGE_ME
+password = CHANGE_ME
+
+[denodo.prod]
+driver_jar = /path/to/denodo-vdp-jdbcdriver.jar
+driver_class = com.denodo.vdp.jdbc.Driver
+jdbc_url = jdbc:denodo://prod-host.example.com:9999/database
+user = CHANGE_ME
+password = CHANGE_ME
+
+; SQL Server — requires the Microsoft JDBC driver jar (mssql-jdbc-*.jar).
+; Uses SQL Server authentication (username/password) — works the same
+; whether this backend runs on Windows or Linux. Don't add
+; integratedSecurity=true/authenticationscheme=NTLM to the URL; that's a
+; different auth mode this connector doesn't use.
+[sqlserver.dev]
+driver_jar = /path/to/mssql-jdbc-13.4.0.jre11.jar
+driver_class = com.microsoft.sqlserver.jdbc.SQLServerDriver
+jdbc_url =
+user =
+password =
+
+[sqlserver.qa]
+driver_jar = /path/to/mssql-jdbc-13.4.0.jre11.jar
+driver_class = com.microsoft.sqlserver.jdbc.SQLServerDriver
+jdbc_url =
+user =
+password =
+
+[sqlserver.prod]
+driver_jar = /path/to/mssql-jdbc-13.4.0.jre11.jar
+driver_class = com.microsoft.sqlserver.jdbc.SQLServerDriver
+jdbc_url =
+user =
+password =
+
+[grail.dev]
+driver_jar = /path/to/mssql-jdbc-13.4.0.jre11.jar
+driver_class = com.microsoft.sqlserver.jdbc.SQLServerDriver
+jdbc_url =
+user =
+password =
+
+[grail.qa]
+driver_jar = /path/to/mssql-jdbc-13.4.0.jre11.jar
+driver_class = com.microsoft.sqlserver.jdbc.SQLServerDriver
+jdbc_url =
+user =
+password =
+
+[grail.prod]
+driver_jar = /path/to/mssql-jdbc-13.4.0.jre11.jar
+driver_class = com.microsoft.sqlserver.jdbc.SQLServerDriver
+jdbc_url =
+user =
+password =
+
+; Databricks / Spark SQL — requires the Databricks JDBC driver jar. Two driver
+; variants exist with different URL prefixes and class names — match
+; driver_class to whichever prefix your jdbc_url actually uses:
+;   jdbc:spark://...      -> com.simba.spark.jdbc.Driver       (older "Simba Spark" driver)
+;   jdbc:databricks://... -> com.databricks.client.jdbc.Driver (newer rebranded driver)
+; Auth uses a personal access token: username is always "token", the token
+; itself goes below (not as "password").
+[databricks.dev]
+driver_jar = /path/to/SimbaSparkJDBC42.jar
+driver_class = com.simba.spark.jdbc.Driver
+jdbc_url =
+token = CHANGE_ME
+
+[databricks.qa]
+driver_jar = /path/to/SimbaSparkJDBC42.jar
+driver_class = com.simba.spark.jdbc.Driver
+jdbc_url =
+token = CHANGE_ME
+
+[databricks.prod]
+driver_jar = /path/to/SimbaSparkJDBC42.jar
+driver_class = com.simba.spark.jdbc.Driver
+jdbc_url =
+token = CHANGE_ME
+
+; Snowflake target. If you omit these sections entirely, IT Checks falls back to
+; the main "snowflake" block already configured in dq_config.json.
+[target.dev]
+account = CHANGE_ME
+user = CHANGE_ME
+private_key_path = /path/to/dev_private_key
+private_key_password =
+role =
+warehouse =
+
+[target.qa]
+account = CHANGE_ME
+user = CHANGE_ME
+private_key_path = /path/to/qa_private_key
+private_key_password =
+role =
+warehouse =
+
+[target.prod]
+account = CHANGE_ME
+user = CHANGE_ME
+private_key_path = /path/to/prod_private_key
+private_key_password =
+role =
+warehouse =

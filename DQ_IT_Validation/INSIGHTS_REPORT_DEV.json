@@ -1,0 +1,2871 @@
+[
+{
+  "pipeline_number": 1,
+  "pipeline_name": "RDI_Insight_Orcl_Snow_SDC_MGR_Incremental_Load",
+  "metadata": {
+    "identifier": "RDI_Insight_Orcl_Snow_SDC_MGR_Incremental_Load",
+    "pipeline_id": "ce79a81a-ddfa-472e-88bf-50fb24dbba4b:its.jnj.com",
+    "extraction_type": "unknown",
+    "generated_timestamp": "2025-11-26T11:01:34.791052",
+    "server_url": "https://rndschqa.jnj.com:18631",
+    "username": "SA-PRD-RIDEQ@its.jnj.com"
+  },
+  "version_info": {
+    "commit_id": "35d3931e-9515-4482-8c05-eb89feaab95d:its.jnj.com",
+    "version": "12.1.4.4",
+    "commit_time": 1757689408431,
+    "committer": "SA-PRD-RIDEQ@its.jnj.com",
+    "commit_message": "",
+    "commit_label": null
+  },
+  "runtime_info": null,
+  "summary": {
+    "total_parameters": 34,
+    "parameters_with_resolved_values": 6,
+    "parameters_with_definitions": 0,
+    "parameters_without_definitions": 28,
+    "data_collectors_count": 1,
+    "jobs_with_metrics": 1
+  },
+  "pipeline_flow": {
+    "sources": [
+      {
+        "technology": "JDBC/Database",
+        "stage_name": "Oracle Insight 7 MGR",
+        "instance": "JDBCMultitableConsumer_01",
+        "type": "com_streamsets_pipeline_stage_origin_jdbc_table_TableJdbcDSource",
+        "configuration": {
+          "Tableconfigs": "[\n  {\n    \"schema\": \"MGR\",\n    \"isTablePatternListProvided\": false,\n    \"tablePattern\": \"%\",\n    \"tablePatternList\": [],\n    \"overrideDefaultOffsetColumns\": false,\n    \"offsetColumns\": [],\n    \"offsetColumnToInitialOffsetValue\": [],\n    \"offsetColumnToLastOffsetValue\": [],\n    \"enableNonIncremental\": true,\n    \"partitioningMode\": \"DISABLED\",\n    \"partitionSize\": \"1000000\",\n    \"maxNumActivePartitions\": -1\n  }\n]",
+          "Number of Threads": "5",
+          "Batchtablestrategy": "SWITCH_TABLES",
+          "Numberofbatchesfromrs": "-1",
+          "Resultcachesize": "-1",
+          "Timezoneid": "UTC",
+          "Quotechar": "NONE",
+          "Tableorderstrategy": "ALPHABETICAL",
+          "Createjdbcheaders": "True",
+          "Unknowntypeaction": "CONVERT_TO_STRING",
+          "Fetchsize": "50000",
+          "Queriespersecond": "10",
+          "Max Batch Size": "25000",
+          "Maxclobsize": "1000",
+          "Maxblobsize": "1000",
+          "Numsqlerrorretries": "0",
+          "Newtablequeryinterval": "${10 * SECONDS} (unable to resolve)",
+          "Nomoredataeventdelay": "0",
+          "Connectionselection": "MANUAL",
+          "Connection String": "jdbc:oracle:thin:@OPCITSNAL013C.jnj.com:1521:QNA3213C",
+          "Usecredentials": "True",
+          "Username": "SA_DATA_FABRIC",
+          "Maximumpoolsize": "5",
+          "Minidle": "5",
+          "Connectiontimeout": "${120 * SECONDS} (unable to resolve)",
+          "Idletimeout": "${20 * MINUTES} (unable to resolve)",
+          "Maxlifetime": "${60 * MINUTES} (unable to resolve)",
+          "Autocommit": "True",
+          "Readonly": "True",
+          "Transactionisolation": "DEFAULT",
+          "Stageonrecorderror": "TO_ERROR",
+          "Maxnumberoftables": "-1",
+          "Querytimeout": "1800"
+        }
+      }
+    ],
+    "targets": [
+      {
+        "technology": "Pipeline Finisher Executor 1",
+        "stage_name": "Pipeline Finisher Executor 1",
+        "instance": "PipelineFinisherExecutor_01",
+        "type": "com_streamsets_pipeline_stage_executor_finishpipeline_PipelineFinisherDExecutor",
+        "configuration": {
+          "Stageonrecorderror": "TO_ERROR",
+          "Stagerecordpreconditions": "${record:eventType() == 'no-more-data'} (unable to resolve)",
+          "Eventtype": "no-more-data"
+        }
+      },
+      {
+        "technology": "Snowflake",
+        "stage_name": "Snowflake 2",
+        "instance": "Snowflake_2",
+        "type": "com_streamsets_pipeline_stage_destination_snowflake_SnowflakeDTarget",
+        "configuration": {
+          "Sockettimeout": "50",
+          "Region": "US_WEST_2",
+          "Quotechar": "'",
+          "Arraydefault": "\\N",
+          "Quotingmode": "QUOTED",
+          "Rowfieldpath": "/",
+          "Fileprefix": "sdc",
+          "Minimumuploadpartsize": "1",
+          "Uppercaseschema": "True",
+          "Authmethod": "CLIENT",
+          "Encryptioncontext": "[\n  {}\n]",
+          "Defaultsfromsnowflake": "True",
+          "Connectionproperties": "[\n  {}\n]",
+          "Compressed": "True",
+          "Customurl": "jdbc:snowflake://[HOST]:[PORT]",
+          "Timedefault": "\\N",
+          "Multipartuploadthreshold": "1",
+          "Endpointtype": "ID",
+          "Connectionselection": "MANUAL",
+          "Blobserviceurl": "https://[AZURE STORAGE ACCOUNT].blob.core.windows.net",
+          "Dictionaryencoding": "True",
+          "Compressioncodec": "UNCOMPRESSED",
+          "Tablekeybeans": "[\n  {\n    \"keyColumns\": []\n  }\n]",
+          "Customsnowflakehost": "[SNOWFLAKE ACCOUNT].snowflakecomputing.com",
+          "Driftttableautocreate": "True",
+          "Setsessiontags": "True",
+          "Sessionduration": "3600",
+          "Accountfqdn": "example.blob.core.windows.net",
+          "Paralleluploads": "1",
+          "Dictionarypagesize": "${1 * MiB} (unable to resolve)",
+          "Customsnowflakeport": "443",
+          "Snowflakeconnectionselection": "0d1127d3-4669-4893-be2e-cca928d5e294:its.jnj.com",
+          "Purgedatafile": "True",
+          "Database": "DEV_RAW",
+          "Datedefault": "\\N",
+          "Datadriftenabled": "True",
+          "Timestamptzdefault": "\\N",
+          "Booleandefault": "\\N",
+          "Regiondefinitiontype": "NOT_SPECIFIED",
+          "Retrycount": "3",
+          "Credentialsprovider": "DEFAULT_PROVIDER",
+          "Maxpaddingsize": "${8 * MiB} (unable to resolve)",
+          "Snowflakeauthenticationmethod": "CREDENTIALS",
+          "Stage": "~",
+          "Chardefault": "\\N",
+          "Table(s)": "RDH_INSIGHTS7_MGR_${record:attribute('jdbc.tables')} (unable to resolve)",
+          "Usesnowflakeorganizationurl": "True",
+          "Usetls": "True",
+          "Stagelocation": "INTERNAL",
+          "Signingregion": "US_WEST_2",
+          "Skipfileoption": "FIRST",
+          "Variantdefault": "\\N",
+          "Warehouse": "WH_RDH_QA_LOADER",
+          "S3Stageconfigtaglist": "[\n  {}\n]",
+          "Doubledefault": "\\N",
+          "Nullablefields": "True",
+          "Endpointurl": "https://login.microsoftonline.com/<tenant-id>/oauth2/token",
+          "Pklocation": "HEADER",
+          "Snowflakeregion": "AWS_US_WEST_2",
+          "Schemasource": "INFER",
+          "Threads": "3",
+          "Escapechar": "\\",
+          "Onerroroption": "DEFAULT",
+          "Columnseparator": ",",
+          "Encryption": "NONE",
+          "Varchardefault": "\\N",
+          "Credentialmode": "WITH_CREDENTIALS",
+          "Binarydefault": "\\N",
+          "Numberdefault": "\\N",
+          "Pipecachesize": "500",
+          "Schema": "INSIGHTS7_MGR_CORE",
+          "Newlinereplacement": "|",
+          "Connectionpoolsize": "0",
+          "Pipeprefix": "${pipeline:id()} (unable to resolve)",
+          "Nullvalue": "\\N",
+          "Rolearn": "arn:aws:iam::<account-id>:role/role-name",
+          "Rowgroupsize": "${128 * MiB} (unable to resolve)",
+          "Fileformat": "CSV",
+          "Pagesize": "${1 * MiB} (unable to resolve)",
+          "Connectiontimeout": "10",
+          "Snowpipeconnectionselection": "MANUAL",
+          "Timestampntzdefault": "\\N",
+          "Stageonrecorderror": "TO_ERROR"
+        }
+      }
+    ]
+  },
+  "pipeline_events": {
+    "start_events": [
+      {
+        "name": "Start Event - Snowflake",
+        "type": "com_streamsets_pipeline_stage_executor_snowflake_SnowflakeDExecutor",
+        "instance": "Snowflake_StartEventStage",
+        "configuration": {
+          "Snowflakeconnectionselection": "0d1127d3-4669-4893-be2e-cca928d5e294:its.jnj.com",
+          "Usesnowflakeorganizationurl": "True",
+          "Snowflakeregion": "AWS_US_WEST_2",
+          "Customurl": "jdbc:snowflake:[HOST]:[PORT]",
+          "Connectionproperties": "[\n  {}\n]",
+          "Connectionpoolsize": "1",
+          "Queries": "use database QA_RAW, call QA_RAW.rdh_core.log_init('RDI_Insight_Orcl_Snow_SDC_MGR_Incremental_Load','Incremental Load','rdh_core'), call QA_RAW.INSIGHTS7_MGR_CORE.TRUNCATE_ALL_TABLES_IN_INSIGHTS7_MGR_CORE( 'QA_RAW', 'INSIGHTS7_MGR_CORE')",
+          "Querymode": "CONSECUTIVE",
+          "Stageonrecorderror": "TO_ERROR",
+          "Snowflakeauthenticationmethod": "CREDENTIALS",
+          "Warehouse": "WH_RDH_QA_LOADER",
+          "Waitduration": "${10 * SECONDS} (unable to resolve)",
+          "Maxattempts": "3"
+        }
+      }
+    ],
+    "stop_events": [
+      {
+        "name": "Stop Event - Snowflake",
+        "type": "com_streamsets_pipeline_stage_executor_snowflake_SnowflakeDExecutor",
+        "instance": "Snowflake_StopEventStage",
+        "configuration": {
+          "Snowflakeconnectionselection": "0d1127d3-4669-4893-be2e-cca928d5e294:its.jnj.com",
+          "Usesnowflakeorganizationurl": "True",
+          "Snowflakeregion": "AWS_US_WEST_2",
+          "Customurl": "jdbc:snowflake:[HOST]:[PORT]",
+          "Connectionproperties": "[\n  {}\n]",
+          "Connectionpoolsize": "1",
+          "Queries": "use database QA_RAW, call QA_RAW.rdh_core.log_final('RDI_Insight_Orcl_Snow_SDC_MGR_Incremental_Load','Incremental Load','rdh_core');",
+          "Querymode": "CONSECUTIVE",
+          "Stageonrecorderror": "TO_ERROR",
+          "Snowflakeauthenticationmethod": "CREDENTIALS",
+          "Warehouse": "WH_RDH_QA_LOADER",
+          "Waitduration": "${10 * SECONDS} (unable to resolve)",
+          "Maxattempts": "3"
+        }
+      }
+    ]
+  },
+  "data_collectors": [
+    {
+      "id": "c5ed7e19-545e-11f0-95a3-c53762bbd177",
+      "url": "https://awsbjvnval002d.jnj.com:18636",
+      "version": null,
+      "state": null,
+      "labels": [
+        "aws6.1"
+      ],
+      "used_by_job": "Job_for_RDI_Insight_Orcl_Snow_SDC_MGR_Core_Full_Load_BT"
+    }
+  ],
+  "parameters": {
+    "with_resolved_values": [
+      {
+        "parameter": "${Insight7_JDBC}",
+        "key": "Insight7_JDBC",
+        "definition": "${runtime:loadResource(\"parameters/RID/INSIGHT7_MGR/Insight7_JDBC.txt\", false)}",
+        "resolved_value": "jdbc:oracle:thin:@OPCITSNAL013C.jnj.com:1521:QNA3213C",
+        "source_sdc": "awsbjvnval002a.jnj.com"
+      },
+      {
+        "parameter": "${Insight7_Password}",
+        "key": "Insight7_Password",
+        "definition": "${runtime:loadResource(\"parameters/RID/INSIGHT7_MGR/Insight7_Password.txt\", false)}",
+        "source_sdc": "awsbjvnval002a.jnj.com"
+      },
+      {
+        "parameter": "${Insight7_User}",
+        "key": "Insight7_User",
+        "definition": "${runtime:loadResource(\"parameters/RID/INSIGHT7_MGR/Insight7_User.txt\", false)}",
+        "resolved_value": "SA_DATA_FABRIC",
+        "source_sdc": "awsbjvnval002a.jnj.com"
+      },
+      {
+        "parameter": "${RID_D_01_SAUSERNAME}",
+        "key": "RID_D_01_SAUSERNAME",
+        "definition": "${runtime:loadResource(\"parameters/RID/BT/Snowflake_QA_Raw/Snowflake_BT_User.txt\", false)}",
+        "resolved_value": "SA-PRD-RDH-QA",
+        "source_sdc": "awsbjvnval002a.jnj.com"
+      },
+      {
+        "parameter": "${Snowflake_RID_Database}",
+        "key": "Snowflake_RID_Database",
+        "definition": "${runtime:loadResource(\"parameters/RID/BT/Snowflake_QA_Raw/Snowflake_RID_Database.txt\", false)}",
+        "resolved_value": "QA_RAW",
+        "source_sdc": "awsbjvnval002a.jnj.com"
+      },
+      {
+        "parameter": "${Snowflake_RID_Warehouse}",
+        "key": "Snowflake_RID_Warehouse",
+        "definition": "${runtime:loadResource(\"parameters/RID/BT/Snowflake_QA_Raw/Snowflake_RID_Warehouse.txt\", false)}",
+        "resolved_value": "WH_RDH_QA_LOADER",
+        "source_sdc": "awsbjvnval002a.jnj.com"
+      }
+    ],
+    "with_definitions": [],
+    "without_definitions": [
+      {
+        "parameter": "${1 * MiB}",
+        "key": "1 * MiB",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${10 * MINUTES}",
+        "key": "10 * MINUTES",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${10 * SECONDS}",
+        "key": "10 * SECONDS",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${120 * SECONDS}",
+        "key": "120 * SECONDS",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${128 * MiB}",
+        "key": "128 * MiB",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${20 * MINUTES}",
+        "key": "20 * MINUTES",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${30 * MINUTES}",
+        "key": "30 * MINUTES",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${30 * SECONDS}",
+        "key": "30 * SECONDS",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${60 * MINUTES}",
+        "key": "60 * MINUTES",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${8 * MiB}",
+        "key": "8 * MiB",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${f:type() == 'DATETIME' && f:value() != NULL}",
+        "key": "f:type() == 'DATETIME' && f:value() != NULL",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${pipeline:id()}",
+        "key": "pipeline:id()",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${pipeline:title()}",
+        "key": "pipeline:title()",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${record:attribute('jdbc.tables')}",
+        "key": "record:attribute('jdbc.tables')",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${record:eventType() == 'no-more-data'}",
+        "key": "record:eventType() == 'no-more-data'",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${record:value('/')}",
+        "key": "record:value('/')",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${runtime:loadResource(\\\"parameters/RID/BT/Snowflake_QA_Raw/Snowflake_BT_User.txt\\\", false)}",
+        "key": "runtime:loadResource(\\\"parameters/RID/BT/Snowflake_QA_Raw/Snowflake_BT_User.txt\\\", false)",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${runtime:loadResource(\\\"parameters/RID/BT/Snowflake_QA_Raw/Snowflake_RID_Database.txt\\\", false)}",
+        "key": "runtime:loadResource(\\\"parameters/RID/BT/Snowflake_QA_Raw/Snowflake_RID_Database.txt\\\", false)",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${runtime:loadResource(\\\"parameters/RID/BT/Snowflake_QA_Raw/Snowflake_RID_Warehouse.txt\\\", false)}",
+        "key": "runtime:loadResource(\\\"parameters/RID/BT/Snowflake_QA_Raw/Snowflake_RID_Warehouse.txt\\\", false)",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${runtime:loadResource(\\\"parameters/RID/INSIGHT7_MGR/Insight7_JDBC.txt\\\", false)}",
+        "key": "runtime:loadResource(\\\"parameters/RID/INSIGHT7_MGR/Insight7_JDBC.txt\\\", false)",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${runtime:loadResource(\\\"parameters/RID/INSIGHT7_MGR/Insight7_Password.txt\\\", false)}",
+        "key": "runtime:loadResource(\\\"parameters/RID/INSIGHT7_MGR/Insight7_Password.txt\\\", false)",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${runtime:loadResource(\\\"parameters/RID/INSIGHT7_MGR/Insight7_User.txt\\\", false)}",
+        "key": "runtime:loadResource(\\\"parameters/RID/INSIGHT7_MGR/Insight7_User.txt\\\", false)",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${str:unescapeJava('\\\\\\\\n')}",
+        "key": "str:unescapeJava('\\\\\\\\n')",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${time:createDateFromStringTZ((time:extractStringFromDateTZ(f:value(),'America/New_York','MM-dd-yyyy hh:mm:ss a')),'UTC','MM-dd-yyyy hh:mm:ss a')}",
+        "key": "time:createDateFromStringTZ((time:extractStringFromDateTZ(f:value(),'America/New_York','MM-dd-yyyy hh:mm:ss a')),'UTC','MM-dd-yyyy hh:mm:ss a')",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${time:now()}",
+        "key": "time:now()",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${time:now() - value() > 120000}",
+        "key": "time:now() - value() > 120000",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${value() > 100}",
+        "key": "value() > 100",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      },
+      {
+        "parameter": "${value() > 200}",
+        "key": "value() > 200",
+        "note": "NOT DEFINED - May be runtime/environment variable"
+      }
+    ],
+    "all_definitions": {
+      "Insight7_JDBC": {
+        "definition": "${runtime:loadResource(\"parameters/RID/INSIGHT7_MGR/Insight7_JDBC.txt\", false)}",
+        "resolved_value": "jdbc:oracle:thin:@OPCITSNAL013C.jnj.com:1521:QNA3213C",
+        "source_sdc": "awsbjvnval002a.jnj.com"
+      },
+      "Insight7_Password": {
+        "definition": "${runtime:loadResource(\"parameters/RID/INSIGHT7_MGR/Insight7_Password.txt\", false)}",
+        "source_sdc": "awsbjvnval002a.jnj.com"
+      },
+      "Insight7_User": {
+        "definition": "${runtime:loadResource(\"parameters/RID/INSIGHT7_MGR/Insight7_User.txt\", false)}",
+        "resolved_value": "SA_DATA_FABRIC",
+        "source_sdc": "awsbjvnval002a.jnj.com"
+      },
+      "RID_D_01_SAUSERNAME": {
+        "definition": "${runtime:loadResource(\"parameters/RID/BT/Snowflake_QA_Raw/Snowflake_BT_User.txt\", false)}",
+        "resolved_value": "SA-PRD-RDH-QA",
+        "source_sdc": "awsbjvnval002a.jnj.com"
+      },
+      "Snowflake_RID_Database": {
+        "definition": "${runtime:loadResource(\"parameters/RID/BT/Snowflake_QA_Raw/Snowflake_RID_Database.txt\", false)}",
+        "resolved_value": "QA_RAW",
+        "source_sdc": "awsbjvnval002a.jnj.com"
+      },
+      "Snowflake_RID_Warehouse": {
+        "definition": "${runtime:loadResource(\"parameters/RID/BT/Snowflake_QA_Raw/Snowflake_RID_Warehouse.txt\", false)}",
+        "resolved_value": "WH_RDH_QA_LOADER",
+        "source_sdc": "awsbjvnval002a.jnj.com"
+      }
+    }
+  },
+  "jobs_execution_metrics": [
+    {
+      "job_name": "Job_for_RDI_Insight_Orcl_Snow_SDC_MGR_Core_Full_Load_BT",
+      "job_id": "46939c80-9967-46ff-9314-9c3e83c0d80b:its.jnj.com",
+      "metrics": {
+        "job_metrics": {
+          "version": null,
+          "gauges": {},
+          "counters": {
+            "stage.FieldHasher_01:FieldHasher_01OutputLane17128470809690.inputRecords.counter": {
+              "count": 0
+            },
+            "stage.JDBCMultitableConsumer_01.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.RND_R_02_FragmentProcessor_01.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.RND_R_02_FieldReplacer_01OutputLane16923439558350.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.RID_D_01_FragmentProcessor_01.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.RND_R_02_FragmentProcessor_01.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.RND_R_02_FieldReplacer_01OutputLane16923439558350.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.Snowflake_2.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01_EventLane.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.RND_R_02_FieldReplacer_01.inputRecords.counter": {
+              "count": 206
+            },
+            "stage.JDBCMultitableConsumer_01OutputLane16837202500300.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.ExpressionEvaluator_2OutputLane17575236912180.outputRecords.counter": {
+              "count": 0
+            },
+            "stage.ExpressionEvaluator_2:ExpressionEvaluator_2OutputLane17575236912180.inputRecords.counter": {
+              "count": 0
+            },
+            "stage.Snowflake_2.outputRecords.counter": {
+              "count": 206
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01.inputRecords.counter": {
+              "count": 206
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01.outputRecords.counter": {
+              "count": 206
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01OutputLane16837202500300.inputRecords.counter": {
+              "count": 0
+            },
+            "stage.PipelineFinisherExecutor_01.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.ExpressionEvaluator_2:ExpressionEvaluator_2OutputLane17575236912180.outputRecords.counter": {
+              "count": 206
+            },
+            "stage.Snowflake_2.inputRecords.counter": {
+              "count": 206
+            },
+            "stage.FieldHasher_01OutputLane17128470809690.outputRecords.counter": {
+              "count": 0
+            },
+            "stage.RND_R_02_FragmentProcessor_01.outputRecords.counter": {
+              "count": 0
+            },
+            "stage.ExpressionEvaluator_2OutputLane17575236912180.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01:RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01OutputLane16837202500300.outputRecords.counter": {
+              "count": 206
+            },
+            "pipeline.batchErrorRecords.counter": {
+              "count": 474
+            },
+            "stage.FieldHasher_01.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.outputRecords.counter": {
+              "count": 0
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01_EventLane.inputRecords.counter": {
+              "count": 0
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01_EventLane.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.FieldHasher_01:FieldHasher_01OutputLane17128470809690.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.RND_R_02_FieldReplacer_01:RND_R_02_FieldReplacer_01OutputLane16923439558350.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.RND_R_02_FieldReplacer_01.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01:RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.outputRecords.counter": {
+              "count": 206
+            },
+            "stage.RND_R_02_FieldReplacer_01:RND_R_02_FieldReplacer_01OutputLane16923439558350.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.inputRecords.counter": {
+              "count": 0
+            },
+            "stage.FieldHasher_01.outputRecords.counter": {
+              "count": 206
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01:RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.RID_D_01_FragmentProcessor_01.outputRecords.counter": {
+              "count": 0
+            },
+            "stage.ExpressionEvaluator_2:ExpressionEvaluator_2OutputLane17575236912180.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.PipelineFinisherExecutor_01.errorRecords.counter": {
+              "count": 474
+            },
+            "stage.RND_R_02_FieldReplacer_01OutputLane16923439558350.outputRecords.counter": {
+              "count": 0
+            },
+            "stage.FieldHasher_01OutputLane17128470809690.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.JDBCMultitableConsumer_01.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01OutputLane16837202500300.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01_EventLane.outputRecords.counter": {
+              "count": 475
+            },
+            "stage.JDBCMultitableConsumer_01OutputLane16837202500300.inputRecords.counter": {
+              "count": 0
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01:RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.inputRecords.counter": {
+              "count": 0
+            },
+            "stage.RND_R_02_FieldReplacer_01.stageErrors.counter": {
+              "count": 0
+            },
+            "pipeline.batchErrorMessages.counter": {
+              "count": 0
+            },
+            "stage.FieldHasher_01.inputRecords.counter": {
+              "count": 206
+            },
+            "stage.RND_R_02_FieldReplacer_01:RND_R_02_FieldReplacer_01OutputLane16923439558350.outputRecords.counter": {
+              "count": 206
+            },
+            "stage.FieldHasher_01:FieldHasher_01OutputLane17128470809690.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.ExpressionEvaluator_2.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.ExpressionEvaluator_2.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.ExpressionEvaluator_2OutputLane17575236912180.errorRecords.counter": {
+              "count": 0
+            },
+            "pipeline.batchInputRecords.counter": {
+              "count": 206
+            },
+            "pipeline.batchOutputRecords.counter": {
+              "count": 207
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01OutputLane16837202500300.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.FieldHasher_01OutputLane17128470809690.inputRecords.counter": {
+              "count": 0
+            },
+            "stage.ExpressionEvaluator_2.outputRecords.counter": {
+              "count": 206
+            },
+            "stage.RND_R_02_FieldReplacer_01OutputLane16923439558350.inputRecords.counter": {
+              "count": 0
+            },
+            "stage.RND_R_02_FieldReplacer_01:RND_R_02_FieldReplacer_01OutputLane16923439558350.inputRecords.counter": {
+              "count": 0
+            },
+            "stage.RND_R_02_FragmentProcessor_01.inputRecords.counter": {
+              "count": 0
+            },
+            "stage.FieldHasher_01:FieldHasher_01OutputLane17128470809690.outputRecords.counter": {
+              "count": 206
+            },
+            "stage.JDBCMultitableConsumer_01.inputRecords.counter": {
+              "count": 0
+            },
+            "stage.PipelineFinisherExecutor_01.inputRecords.counter": {
+              "count": 475
+            },
+            "stage.Snowflake_2.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.JDBCMultitableConsumer_01OutputLane16837202500300.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.ExpressionEvaluator_2OutputLane17575236912180.inputRecords.counter": {
+              "count": 0
+            },
+            "stage.ExpressionEvaluator_2:ExpressionEvaluator_2OutputLane17575236912180.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.FieldHasher_01.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01.errorRecords.counter": {
+              "count": 0
+            },
+            "stage.FieldHasher_01OutputLane17128470809690.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.RND_R_02_FieldReplacer_01.outputRecords.counter": {
+              "count": 206
+            },
+            "stage.JDBCMultitableConsumer_01.outputRecords.counter": {
+              "count": 206
+            },
+            "stage.JDBCMultitableConsumer_01OutputLane16837202500300.outputRecords.counter": {
+              "count": 0
+            },
+            "stage.RID_D_01_FragmentProcessor_01.stageErrors.counter": {
+              "count": 0
+            },
+            "stage.RID_D_01_FragmentProcessor_01.inputRecords.counter": {
+              "count": 0
+            },
+            "stage.ExpressionEvaluator_2.inputRecords.counter": {
+              "count": 206
+            },
+            "stage.PipelineFinisherExecutor_01.outputRecords.counter": {
+              "count": 1
+            }
+          },
+          "histograms": null,
+          "meters": {
+            "stage.RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "pipeline.batchErrorRecords.meter": {
+              "count": 474,
+              "m1_rate": 6.445446806347959,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FragmentProcessor_01.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_FragmentProcessor_01.outputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_FragmentProcessor_01.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01OutputLane16837202500300.inputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.Snowflake_2.inputRecords.meter": {
+              "count": 206,
+              "m1_rate": 4.896017134610537,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.ExpressionEvaluator_2OutputLane17575236912180.inputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01:RND_R_02_FieldReplacer_01OutputLane16923439558350.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.PipelineFinisherExecutor_01.errorRecords.meter": {
+              "count": 474,
+              "m1_rate": 28.814934315200354,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01OutputLane16837202500300.outputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01OutputLane16923439558350.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.FieldHasher_01OutputLane17128470809690.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_FragmentProcessor_01.inputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01_EventLane.outputRecords.meter": {
+              "count": 475,
+              "m1_rate": 27.831946426277405,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01:RND_R_02_FieldReplacer_01OutputLane16923439558350.outputRecords.meter": {
+              "count": 206,
+              "m1_rate": 26.228582504803114,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01:RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.PipelineFinisherExecutor_01.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01_EventLane.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.Snowflake_2.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FragmentProcessor_01.outputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01OutputLane16923439558350.outputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01_EventLane.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.ExpressionEvaluator_2OutputLane17575236912180.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.Snowflake_2.outputRecords.meter": {
+              "count": 206,
+              "m1_rate": 4.896017134610537,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01OutputLane16923439558350.inputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01.outputRecords.meter": {
+              "count": 206,
+              "m1_rate": 26.228582504803114,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.ExpressionEvaluator_2OutputLane17575236912180.outputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "pipeline.batchErrorMessages.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.FieldHasher_01:FieldHasher_01OutputLane17128470809690.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.Snowflake_2.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.FieldHasher_01.inputRecords.meter": {
+              "count": 206,
+              "m1_rate": 26.228582504803114,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01:RND_R_02_FieldReplacer_01OutputLane16923439558350.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01.inputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01OutputLane16837202500300.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FragmentProcessor_01.inputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01OutputLane16837202500300.outputRecords.meter": {
+              "count": 206,
+              "m1_rate": 26.228582504803114,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.ExpressionEvaluator_2:ExpressionEvaluator_2OutputLane17575236912180.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01OutputLane16837202500300.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01:RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01_EventLane.inputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.ExpressionEvaluator_2.inputRecords.meter": {
+              "count": 206,
+              "m1_rate": 26.228582504803114,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01OutputLane16837202500300.inputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.FieldHasher_01.outputRecords.meter": {
+              "count": 206,
+              "m1_rate": 26.228582504803114,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.FieldHasher_01:FieldHasher_01OutputLane17128470809690.inputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.ExpressionEvaluator_2.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.FieldHasher_01OutputLane17128470809690.inputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.FieldHasher_01.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.ExpressionEvaluator_2:ExpressionEvaluator_2OutputLane17575236912180.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.FieldHasher_01:FieldHasher_01OutputLane17128470809690.outputRecords.meter": {
+              "count": 206,
+              "m1_rate": 26.228582504803114,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.ExpressionEvaluator_2:ExpressionEvaluator_2OutputLane17575236912180.inputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01.inputRecords.meter": {
+              "count": 206,
+              "m1_rate": 26.228582504803114,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01:RND_R_02_FieldReplacer_01OutputLane16923439558350.inputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FragmentProcessor_01.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01:RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.outputRecords.meter": {
+              "count": 206,
+              "m1_rate": 26.228582504803114,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01.inputRecords.meter": {
+              "count": 206,
+              "m1_rate": 26.228582504803114,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.FieldHasher_01.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.inputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.outputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01:RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.inputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "pipeline.batchInputRecords.meter": {
+              "count": 206,
+              "m1_rate": 3.061468716268261,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.PipelineFinisherExecutor_01.inputRecords.meter": {
+              "count": 475,
+              "m1_rate": 28.830925432274487,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "pipeline.batchOutputRecords.meter": {
+              "count": 207,
+              "m1_rate": 3.061468716268261,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.FieldHasher_01OutputLane17128470809690.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.FieldHasher_01OutputLane17128470809690.outputRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.ExpressionEvaluator_2.outputRecords.meter": {
+              "count": 206,
+              "m1_rate": 26.228582504803114,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01OutputLane16837202500300.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.ExpressionEvaluator_2.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01.outputRecords.meter": {
+              "count": 206,
+              "m1_rate": 26.228582504803114,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.ExpressionEvaluator_2:ExpressionEvaluator_2OutputLane17575236912180.outputRecords.meter": {
+              "count": 206,
+              "m1_rate": 26.228582504803114,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01OutputLane16923439558350.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.FieldHasher_01:FieldHasher_01OutputLane17128470809690.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.ExpressionEvaluator_2OutputLane17575236912180.stageErrors.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01.outputRecords.meter": {
+              "count": 206,
+              "m1_rate": 26.228582504803114,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.RID_D_01_FragmentProcessor_01.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01OutputLane16837202500300.errorRecords.meter": {
+              "count": 0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            },
+            "stage.PipelineFinisherExecutor_01.outputRecords.meter": {
+              "count": 1,
+              "m1_rate": 0.015991117074135343,
+              "m5_rate": 0.0,
+              "m15_rate": 0.0,
+              "m30_rate": 0.0,
+              "h1_rate": 0.0,
+              "h6_rate": 0.0,
+              "h12_rate": 0.0,
+              "h24_rate": 0.0,
+              "mean_rate": 0.0,
+              "units": null
+            }
+          },
+          "timers": {
+            "stage.JDBCMultitableConsumer_01OutputLane16837202500300.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "pipeline.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.12011392405063291,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.ExpressionEvaluator_2OutputLane17575236912180.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.FieldHasher_01OutputLane17128470809690.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.Snowflake_2.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.05443037974683544,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.RID_D_01_FragmentProcessor_01.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 6.751054852320675e-05,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.ExpressionEvaluator_2.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 1.2658227848101267e-05,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 2.109704641350211e-06,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01_EventLane.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.JDBCMultitableConsumer_01.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.06450210970464135,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01OutputLane16923439558350.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.PipelineFinisherExecutor_01.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.00013152400835073072,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.RND_R_02_FragmentProcessor_01.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.ExpressionEvaluator_2:ExpressionEvaluator_2OutputLane17575236912180.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.RND_R_02_FieldReplacer_01:RND_R_02_FieldReplacer_01OutputLane16923439558350.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.FieldHasher_01.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 1.4767932489451479e-05,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.RID_D_01_ExpressionEvaluator_01:RID_D_01_ExpressionEvaluator_01OutputLane17127653994090.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.JDBCMultitableConsumer_01:JDBCMultitableConsumer_01OutputLane16837202500300.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            },
+            "stage.FieldHasher_01:FieldHasher_01OutputLane17128470809690.batchProcessing.timer": {
+              "count": 0,
+              "max": 0.0,
+              "mean": 0.0,
+              "min": 0.0,
+              "p50": 0.0,
+              "p75": 0.0,
+              "p95": 0.0,
+              "p98": 0.0,
+              "p99": 0.0,
+              "p999": 0.0,
+              "stddev": 0.0,
+              "m15_rate": 0.0,
+              "m1_rate": 0.0,
+              "m5_rate": 0.0,
+              "mean_rate": 0.0,
+              "duration_units": null,
+              "rate_units": null
+            }
+          },
+          "slaves": null
+        },
+        "record_counts": [
+          {
+            "series": null,
+            "error": null
+          },
+          {
+            "series": null,
+            "error": null
+          },
+          {
+            "series": null,
+            "error": null
+          },
+          {
+            "series": null,
+            "error": null
+          }
+        ],
+        "record_throughput": [
+          {
+            "series": null,
+            "error": null
+          },
+          {
+            "series": null,
+            "error": null
+          },
+          {
+            "series": null,
+            "error": null
+          },
+          {
+            "series": null,
+            "error": null
+          }
+        ],
+        "status": "success",
+        "summary": {
+          "input_records": 0,
+          "output_records": 0,
+          "error_records": 0,
+          "start_time": null,
+          "end_time": null,
+          "status": "Unknown"
+        }
+      }
+    }
+  ],
+  "jobs_runtime_info": [
+    {
+      "job_name": "Job_for_RDI_Insight_Orcl_Snow_SDC_MGR_Core_Full_Load_BT",
+      "job_id": "46939c80-9967-46ff-9314-9c3e83c0d80b:its.jnj.com",
+      "runtime_info": {
+        "job_id": "46939c80-9967-46ff-9314-9c3e83c0d80b:its.jnj.com",
+        "job_name": "Job_for_RDI_Insight_Orcl_Snow_SDC_MGR_Core_Full_Load_BT",
+        "pipeline_commit_id": "35d3931e-9515-4482-8c05-eb89feaab95d:its.jnj.com",
+        "pipeline_name": "RDI_Insight_Orcl_Snow_SDC_MGR_Incremental_Load",
+        "status": "INACTIVE",
+        "color": "GRAY",
+        "start_time": 1764108018227,
+        "finish_time": 1764108365178,
+        "input_records": 0,
+        "output_records": 0,
+        "error_records": 0,
+        "run_count": 32,
+        "executor_count": null
+      }
+    }
+  ],
+  "pipeline_stages": {
+    "pipeline_stage_info": {
+      "pipeline_name": "RDI_Insight_Orcl_Snow_SDC_MGR_Incremental_Load",
+      "pipeline_id": "ce79a81a-ddfa-472e-88bf-50fb24dbba4b:its.jnj.com",
+      "commit_id": "35d3931e-9515-4482-8c05-eb89feaab95d:its.jnj.com",
+      "version": "12.1.4.4",
+      "extraction_time": "2025-11-26 11:01:34"
+    },
+    "stage_summary": {
+      "total_stages": 7,
+      "sources_excluded": 1,
+      "processors_included": 4,
+      "targets_excluded": 2,
+      "other_included": 0,
+      "stages_extracted": 4,
+      "stages_enriched_with_commit_info": 2,
+      "stages_with_summaries": 4
+    },
+    "stage_summaries": [
+      {
+        "instance_name": "ExpressionEvaluator_2",
+        "stage_type": "PROCESSOR",
+        "summary": "Expression Evaluator: Sets 2 field(s) - /LOAD_DATE = ${time:now()}; /DL_DATASOURCE_ID = 1",
+        "is_fragment": false
+      },
+      {
+        "instance_name": "RID_D_01_FragmentProcessor_01",
+        "stage_type": "PROCESSOR",
+        "summary": "Fragment Processor: 'RID_DL_COLUMNS_FRAGMENT' (instance: RID_D_01)",
+        "is_fragment": true,
+        "fragment_name": "RID_DL_COLUMNS_FRAGMENT",
+        "fragment_summary": "Expression Evaluator: Sets 5 field(s) - /DL_CREATED_DATE = ${time:now()}; /DL_LAST_UPDATED_DATE = ${time:now()}; /DL_CREATED_BY = ${SAUSERNAME}; /DL_UPDATED_BY = ${SAUSERNAME}; /LOAD_DATE = ${time:now()}"
+      },
+      {
+        "instance_name": "RND_R_02_FragmentProcessor_01",
+        "stage_type": "PROCESSOR",
+        "summary": "Fragment Processor: 'RND_RID_SDC_BA_datetime' (instance: RND_R_02)",
+        "is_fragment": true,
+        "fragment_name": "RND_RID_SDC_BA_datetime",
+        "fragment_summary": "Field Replacer: Replaces '/*[${f:type() == 'DATETIME' && f:value() != NULL}]' with '${time:createDateFromStringTZ((time:extractStringFromDateTZ(f:value(),'America/New_York','MM-dd-yyyy hh:mm:ss a')),'UTC','MM-dd-yyyy hh:mm:ss a')}'"
+      },
+      {
+        "instance_name": "FieldHasher_01",
+        "stage_type": "PROCESSOR",
+        "summary": "FieldHasher processor",
+        "is_fragment": false
+      }
+    ],
+    "stages": {
+      "processors": [
+        {
+          "instanceName": "ExpressionEvaluator_2",
+          "library": "streamsets-datacollector-basic-lib",
+          "stageName": "com_streamsets_pipeline_stage_processor_expression_ExpressionDProcessor",
+          "stageVersion": "2",
+          "configuration": [
+            {
+              "name": "fieldAttributeConfigs",
+              "value": []
+            },
+            {
+              "name": "expressionProcessorConfigs",
+              "value": [
+                {
+                  "fieldToSet": "/LOAD_DATE",
+                  "expression": "${time:now()}"
+                },
+                {
+                  "fieldToSet": "/DL_DATASOURCE_ID",
+                  "expression": "1"
+                }
+              ]
+            },
+            {
+              "name": "headerAttributeConfigs",
+              "value": []
+            },
+            {
+              "name": "stageOnRecordError",
+              "value": "TO_ERROR"
+            },
+            {
+              "name": "stageRequiredFields",
+              "value": []
+            },
+            {
+              "name": "stageRecordPreconditions",
+              "value": []
+            }
+          ],
+          "uiInfo": {
+            "outputStreamLabels": null,
+            "yPos": 50,
+            "stageType": "PROCESSOR",
+            "rawSource": null,
+            "icon": "expression.png",
+            "description": "",
+            "inputStreamLabels": null,
+            "label": "Expression Evaluator",
+            "xPos": 280,
+            "displayMode": "ADVANCED"
+          },
+          "inputLanes": [
+            "JDBCMultitableConsumer_01OutputLane16837202500300"
+          ],
+          "outputLanes": [
+            "ExpressionEvaluator_2OutputLane17575236912180"
+          ],
+          "eventLanes": [],
+          "services": [],
+          "stage_summary": "Expression Evaluator: Sets 2 field(s) - /LOAD_DATE = ${time:now()}; /DL_DATASOURCE_ID = 1"
+        },
+        {
+          "instanceName": "RID_D_01_FragmentProcessor_01",
+          "library": "streamsets-datacollector-basic-lib",
+          "stageName": "com_streamsets_pipeline_stage_processor_fragment_FragmentProcessor",
+          "stageVersion": "1",
+          "configuration": [
+            {
+              "name": "conf.fragmentId",
+              "value": "RIDDLCOL417e4068-b235-4062-b8ea-fd60ab10b800"
+            },
+            {
+              "name": "conf.fragmentInstanceId",
+              "value": "RID_D_01"
+            }
+          ],
+          "uiInfo": {
+            "yPos": 50,
+            "stageType": "PROCESSOR",
+            "rawSource": null,
+            "pipelineCommitLabel": "v2.1",
+            "icon": "fragment.png",
+            "description": "",
+            "firstStageInstanceName": "ExpressionEvaluator_01",
+            "label": "RDI_DL_COLUMNS_FRAGMENT 1",
+            "xPos": 500,
+            "fragmentGroupStage": true,
+            "displayMode": "BASIC",
+            "pipelineId": "53511f75-8fef-4cac-8579-67d6c72eeb0e:its.jnj.com",
+            "outputStreamLabels": null,
+            "parameterNamePrefix": "RID_D_01_",
+            "fragmentName": "RID_DL_COLUMNS_FRAGMENT",
+            "fragmentId": "RIDDLCOL417e4068-b235-4062-b8ea-fd60ab10b800",
+            "inputStreamLabels": null,
+            "fragmentInstanceId": "RID_D_01",
+            "pipelineCommitId": "4b11237c-c133-4d3d-943f-cad0faf5de11:its.jnj.com"
+          },
+          "inputLanes": [
+            "ExpressionEvaluator_2OutputLane17575236912180"
+          ],
+          "outputLanes": [
+            "RID_D_01_ExpressionEvaluator_01OutputLane17127653994090"
+          ],
+          "eventLanes": [],
+          "services": [],
+          "enriched_commit_info": {
+            "commit_id": "4b11237c-c133-4d3d-943f-cad0faf5de11:its.jnj.com",
+            "pipeline_id": "53511f75-8fef-4cac-8579-67d6c72eeb0e:its.jnj.com",
+            "name": "RID_DL_COLUMNS_FRAGMENT",
+            "title": null,
+            "version": "2.1",
+            "description": "",
+            "created": null,
+            "lastModified": null,
+            "creator": null,
+            "lastModifier": null,
+            "pipeline_definition": {
+              "uuid": "ff4a2ef8-af55-42d4-ace1-fa8f75ee31a6",
+              "schemaVersion": 2,
+              "version": 2,
+              "pipelineId": null,
+              "title": "RID_DL_COLUMNS_FRAGMENT",
+              "description": "",
+              "configuration": [
+                {
+                  "name": "executionMode",
+                  "value": "STANDALONE"
+                },
+                {
+                  "name": "testOriginStage",
+                  "value": "streamsets-datacollector-dev-lib::com_streamsets_pipeline_stage_devtest_rawdata_RawDataDSource::3"
+                },
+                {
+                  "name": "constants",
+                  "value": [
+                    {
+                      "key": "SAUSERNAME",
+                      "value": "SA_RID_DEV"
+                    }
+                  ]
+                }
+              ],
+              "uiInfo": {
+                "fragmentStageConfiguration": {
+                  "instanceName": "FragmentProcessor_1",
+                  "library": "streamsets-datacollector-basic-lib",
+                  "stageName": "com_streamsets_pipeline_stage_processor_fragment_FragmentProcessor",
+                  "stageVersion": "1",
+                  "configuration": [
+                    {
+                      "name": "conf.fragmentInstanceId"
+                    },
+                    {
+                      "name": "conf.fragmentId"
+                    }
+                  ],
+                  "uiInfo": {
+                    "label": "Fragment Processor 1",
+                    "description": "",
+                    "xPos": 677.9999694824219,
+                    "yPos": 50,
+                    "stageType": "PROCESSOR",
+                    "icon": "fragment.png",
+                    "inputStreamLabels": null,
+                    "outputStreamLabels": null,
+                    "rawSource": null,
+                    "firstStageInstanceName": "ExpressionEvaluator_01"
+                  },
+                  "inputLanes": [],
+                  "outputLanes": [
+                    "ExpressionEvaluator_01OutputLane17127653994090"
+                  ],
+                  "eventLanes": [],
+                  "services": []
+                },
+                "displayMode": "BASIC"
+              },
+              "stages_count": 1,
+              "stages": [
+                {
+                  "instanceName": "ExpressionEvaluator_01",
+                  "library": "streamsets-datacollector-basic-lib",
+                  "stageName": "com_streamsets_pipeline_stage_processor_expression_ExpressionDProcessor",
+                  "stageVersion": "2",
+                  "configuration": [
+                    {
+                      "name": "expressionProcessorConfigs",
+                      "value": [
+                        {
+                          "fieldToSet": "/DL_CREATED_DATE",
+                          "expression": "${time:now()}"
+                        },
+                        {
+                          "fieldToSet": "/DL_LAST_UPDATED_DATE",
+                          "expression": "${time:now()}"
+                        },
+                        {
+                          "fieldToSet": "/DL_CREATED_BY",
+                          "expression": "${SAUSERNAME}"
+                        },
+                        {
+                          "fieldToSet": "/DL_UPDATED_BY",
+                          "expression": "${SAUSERNAME}"
+                        },
+                        {
+                          "fieldToSet": "/LOAD_DATE",
+                          "expression": "${time:now()}"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "headerAttributeConfigs",
+                      "value": [
+                        {}
+                      ]
+                    },
+                    {
+                      "name": "fieldAttributeConfigs",
+                      "value": [
+                        {
+                          "fieldToSet": "/"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "stageOnRecordError",
+                      "value": "TO_ERROR"
+                    },
+                    {
+                      "name": "stageRequiredFields",
+                      "value": []
+                    },
+                    {
+                      "name": "stageRecordPreconditions",
+                      "value": []
+                    }
+                  ],
+                  "uiInfo": {
+                    "outputStreamLabels": null,
+                    "yPos": 86,
+                    "stageType": "PROCESSOR",
+                    "rawSource": null,
+                    "icon": "expression.png",
+                    "description": "",
+                    "inputStreamLabels": null,
+                    "label": "Expression Evaluator 1",
+                    "xPos": 457.9999694824219,
+                    "displayMode": "BASIC"
+                  },
+                  "inputLanes": [],
+                  "outputLanes": [
+                    "ExpressionEvaluator_01OutputLane17127653994090"
+                  ],
+                  "eventLanes": [],
+                  "services": []
+                }
+              ]
+            },
+            "fragment_summary": "Expression Evaluator: Sets 5 field(s) - /DL_CREATED_DATE = ${time:now()}; /DL_LAST_UPDATED_DATE = ${time:now()}; /DL_CREATED_BY = ${SAUSERNAME}; /DL_UPDATED_BY = ${SAUSERNAME}; /LOAD_DATE = ${time:now()}"
+          },
+          "stage_summary": "Fragment Processor: 'RID_DL_COLUMNS_FRAGMENT' (instance: RID_D_01)"
+        },
+        {
+          "instanceName": "RND_R_02_FragmentProcessor_01",
+          "library": "streamsets-datacollector-basic-lib",
+          "stageName": "com_streamsets_pipeline_stage_processor_fragment_FragmentProcessor",
+          "stageVersion": "1",
+          "configuration": [
+            {
+              "name": "conf.fragmentId",
+              "value": "RNDRIDSD70d9af46-d829-4910-994b-cdd6bc7df1c0"
+            },
+            {
+              "name": "conf.fragmentInstanceId",
+              "value": "RND_R_02"
+            }
+          ],
+          "uiInfo": {
+            "yPos": 50,
+            "stageType": "PROCESSOR",
+            "rawSource": null,
+            "pipelineCommitLabel": "v4",
+            "icon": "fragment.png",
+            "description": "Datetime correction",
+            "firstStageInstanceName": "FieldReplacer_01",
+            "label": "RDI_SDC_BA_datetime 1",
+            "xPos": 720,
+            "fragmentGroupStage": true,
+            "displayMode": "BASIC",
+            "pipelineId": "027b886c-2fd6-4a5c-979e-2ef8c0bdbf24:its.jnj.com",
+            "outputStreamLabels": null,
+            "parameterNamePrefix": "RND_R_02_datetime",
+            "fragmentName": "RND_RID_SDC_BA_datetime",
+            "fragmentId": "RNDRIDSD70d9af46-d829-4910-994b-cdd6bc7df1c0",
+            "inputStreamLabels": null,
+            "fragmentInstanceId": "RND_R_02",
+            "pipelineCommitId": "22418635-28b7-40c8-bbe1-089bf11d08d7:its.jnj.com"
+          },
+          "inputLanes": [
+            "RID_D_01_ExpressionEvaluator_01OutputLane17127653994090"
+          ],
+          "outputLanes": [
+            "RND_R_02_FieldReplacer_01OutputLane16923439558350"
+          ],
+          "eventLanes": [],
+          "services": [],
+          "enriched_commit_info": {
+            "commit_id": "22418635-28b7-40c8-bbe1-089bf11d08d7:its.jnj.com",
+            "pipeline_id": "027b886c-2fd6-4a5c-979e-2ef8c0bdbf24:its.jnj.com",
+            "name": "RND_RID_SDC_BA_datetime",
+            "title": null,
+            "version": "4",
+            "description": "Datetime correction",
+            "created": null,
+            "lastModified": null,
+            "creator": null,
+            "lastModifier": null,
+            "pipeline_definition": {
+              "uuid": "1b1715da-62e4-4c9b-8c71-45c6594643d7",
+              "schemaVersion": 2,
+              "version": 2,
+              "pipelineId": null,
+              "title": "RND_RID_SDC_BA_datetime",
+              "description": "Datetime correction",
+              "configuration": [
+                {
+                  "name": "executionMode",
+                  "value": "STANDALONE"
+                },
+                {
+                  "name": "constants",
+                  "value": []
+                },
+                {
+                  "name": "testOriginStage",
+                  "value": "streamsets-datacollector-dev-lib::com_streamsets_pipeline_stage_devtest_rawdata_RawDataDSource::3"
+                }
+              ],
+              "uiInfo": {
+                "fragmentStageConfiguration": {
+                  "instanceName": "FragmentProcessor_1",
+                  "library": "streamsets-datacollector-basic-lib",
+                  "stageName": "com_streamsets_pipeline_stage_processor_fragment_FragmentProcessor",
+                  "stageVersion": "1",
+                  "configuration": [
+                    {
+                      "name": "conf.fragmentInstanceId"
+                    },
+                    {
+                      "name": "conf.fragmentId"
+                    }
+                  ],
+                  "uiInfo": {
+                    "label": "Fragment Processor 1",
+                    "description": "",
+                    "xPos": 280,
+                    "yPos": 50,
+                    "stageType": "PROCESSOR",
+                    "icon": "fragment.png",
+                    "inputStreamLabels": null,
+                    "outputStreamLabels": null,
+                    "rawSource": null,
+                    "firstStageInstanceName": "FieldReplacer_01"
+                  },
+                  "inputLanes": [],
+                  "outputLanes": [
+                    "FieldReplacer_01OutputLane16923439558350"
+                  ],
+                  "eventLanes": [],
+                  "services": []
+                },
+                "displayMode": "ADVANCED"
+              },
+              "stages_count": 1,
+              "stages": [
+                {
+                  "instanceName": "FieldReplacer_01",
+                  "library": "streamsets-datacollector-basic-lib",
+                  "stageName": "com_streamsets_pipeline_stage_processor_fieldreplacer_FieldReplacerDProcessor",
+                  "stageVersion": "2",
+                  "configuration": [
+                    {
+                      "name": "conf.rules",
+                      "value": [
+                        {
+                          "fields": "/*[${f:type() == 'DATETIME' && f:value() != NULL}]",
+                          "setToNull": false,
+                          "replacement": "${time:createDateFromStringTZ((time:extractStringFromDateTZ(f:value(),'America/New_York','MM-dd-yyyy hh:mm:ss a')),'UTC','MM-dd-yyyy hh:mm:ss a')}"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "stageOnRecordError",
+                      "value": "TO_ERROR"
+                    },
+                    {
+                      "name": "stageRequiredFields",
+                      "value": []
+                    },
+                    {
+                      "name": "stageRecordPreconditions",
+                      "value": []
+                    },
+                    {
+                      "name": "conf.nonExistingFieldHandling",
+                      "value": "ADD_FIELD"
+                    }
+                  ],
+                  "uiInfo": {
+                    "outputStreamLabels": null,
+                    "yPos": 50,
+                    "stageType": "PROCESSOR",
+                    "rawSource": null,
+                    "icon": "replacer.png",
+                    "description": "",
+                    "inputStreamLabels": null,
+                    "label": "Field Replacer 1",
+                    "xPos": 60,
+                    "displayMode": "BASIC"
+                  },
+                  "inputLanes": [],
+                  "outputLanes": [
+                    "FieldReplacer_01OutputLane16923439558350"
+                  ],
+                  "eventLanes": [],
+                  "services": []
+                }
+              ]
+            },
+            "fragment_summary": "Field Replacer: Replaces '/*[${f:type() == 'DATETIME' && f:value() != NULL}]' with '${time:createDateFromStringTZ((time:extractStringFromDateTZ(f:value(),'America/New_York','MM-dd-yyyy hh:mm:ss a')),'UTC','MM-dd-yyyy hh:mm:ss a')}'"
+          },
+          "stage_summary": "Fragment Processor: 'RND_RID_SDC_BA_datetime' (instance: RND_R_02)"
+        },
+        {
+          "instanceName": "FieldHasher_01",
+          "library": "streamsets-datacollector-basic-lib",
+          "stageName": "com_streamsets_pipeline_stage_processor_fieldhasher_FieldHasherDProcessor",
+          "stageVersion": "4",
+          "configuration": [
+            {
+              "name": "hasherConfig.recordHasherConfig.hashEntireRecord",
+              "value": false
+            },
+            {
+              "name": "hasherConfig.recordHasherConfig.includeRecordHeaderForHashing",
+              "value": false
+            },
+            {
+              "name": "hasherConfig.recordHasherConfig.useSeparator",
+              "value": false
+            },
+            {
+              "name": "hasherConfig.recordHasherConfig.separatorCharacter",
+              "value": "\u0000"
+            },
+            {
+              "name": "hasherConfig.recordHasherConfig.hashType",
+              "value": "MD5"
+            },
+            {
+              "name": "hasherConfig.recordHasherConfig.targetField",
+              "value": null
+            },
+            {
+              "name": "hasherConfig.recordHasherConfig.headerAttribute",
+              "value": null
+            },
+            {
+              "name": "hasherConfig.useSeparator",
+              "value": false
+            },
+            {
+              "name": "hasherConfig.separatorCharacter",
+              "value": "\u0000"
+            },
+            {
+              "name": "hasherConfig.inPlaceFieldHasherConfigs",
+              "value": []
+            },
+            {
+              "name": "hasherConfig.targetFieldHasherConfigs",
+              "value": [
+                {
+                  "targetField": "/DL_ID",
+                  "sourceFieldsToHash": [
+                    "/ID"
+                  ],
+                  "hashType": "MD5"
+                }
+              ]
+            },
+            {
+              "name": "onStagePreConditionFailure",
+              "value": "TO_ERROR"
+            },
+            {
+              "name": "stageOnRecordError",
+              "value": "TO_ERROR"
+            },
+            {
+              "name": "stageRequiredFields",
+              "value": []
+            },
+            {
+              "name": "stageRecordPreconditions",
+              "value": []
+            }
+          ],
+          "uiInfo": {
+            "outputStreamLabels": null,
+            "yPos": 50,
+            "stageType": "PROCESSOR",
+            "rawSource": null,
+            "icon": "hash.png",
+            "description": "",
+            "inputStreamLabels": null,
+            "label": "Field Hasher 1",
+            "xPos": 940,
+            "displayMode": "ADVANCED"
+          },
+          "inputLanes": [
+            "RND_R_02_FieldReplacer_01OutputLane16923439558350"
+          ],
+          "outputLanes": [
+            "FieldHasher_01OutputLane17128470809690"
+          ],
+          "eventLanes": [],
+          "services": [],
+          "stage_summary": "FieldHasher processor"
+        }
+      ],
+      "other": []
+    }
+  }
+}
+]

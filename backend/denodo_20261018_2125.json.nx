@@ -1,0 +1,471 @@
+{
+ "script_version": "4.0",
+ "python": "3.13.2",
+ "base_url": "https://denodo-dev2.jnj.com:9443/denodo-data-catalog",
+ "term": "customer",
+ "typo_forms": {
+  "1": "cstomer",
+  "2": "cstmer",
+  "3": "cstmr"
+ },
+ "db_ids": [
+  71
+ ],
+ "credentials_in_file": false,
+ "sections": {
+  "pick": {
+   "status": 200,
+   "ms": 56837,
+   "error": null,
+   "views": 36,
+   "hits": 107,
+   "rows_by_letters_off": {
+    "0": 79,
+    "4": 7,
+    "5": 8,
+    "6": 2
+   }
+  },
+  "per_view": {
+   "phrase": {
+    "query": "\"customer\"",
+    "why": "what the page sends for an exact search",
+    "status": 200,
+    "ms": 544,
+    "error": null,
+    "count": 21,
+    "returned": 21,
+    "rows_by_letters_off": {
+     "0": 21
+    },
+    "closest_words": [
+     [
+      "customer",
+      21
+     ]
+    ]
+   },
+   "bare": {
+    "query": "customer",
+    "why": "plain word",
+    "status": 200,
+    "ms": 515,
+    "error": null,
+    "count": 21,
+    "returned": 21,
+    "rows_by_letters_off": {
+     "0": 21
+    },
+    "closest_words": [
+     [
+      "customer",
+      21
+     ]
+    ]
+   },
+   "typo1_d1": {
+    "query": "cstomer~1",
+    "why": "1 off, 1 typo allowed: should find",
+    "status": 200,
+    "ms": 540,
+    "error": null,
+    "count": 21,
+    "returned": 21,
+    "rows_by_letters_off": {
+     "0": 21
+    },
+    "closest_words": [
+     [
+      "customer",
+      21
+     ]
+    ]
+   },
+   "typo2_d1": {
+    "query": "cstmer~1",
+    "why": "2 off, 1 typo allowed: should find nothing new",
+    "status": 200,
+    "ms": 486,
+    "error": null,
+    "count": 0,
+    "returned": 0,
+    "rows_by_letters_off": {},
+    "closest_words": []
+   },
+   "typo2_d2": {
+    "query": "cstmer~2",
+    "why": "2 off, 2 typos allowed: should find",
+    "status": 200,
+    "ms": 707,
+    "error": null,
+    "count": 25,
+    "returned": 25,
+    "rows_by_letters_off": {
+     "0": 21,
+     "3": 4
+    },
+    "closest_words": [
+     [
+      "customer",
+      21
+     ],
+     [
+      "cutler",
+      4
+     ]
+    ]
+   },
+   "typo3_d2": {
+    "query": "cstmr~2",
+    "why": "3 off, 2 typos allowed: should find nothing",
+    "status": 200,
+    "ms": 496,
+    "error": null,
+    "count": 0,
+    "returned": 0,
+    "rows_by_letters_off": {},
+    "closest_words": []
+   },
+   "typo3_d3": {
+    "query": "cstmr~3",
+    "why": "THE QUESTION: does ~3 work",
+    "status": 200,
+    "ms": 496,
+    "error": null,
+    "count": 0,
+    "returned": 0,
+    "rows_by_letters_off": {},
+    "closest_words": []
+   },
+   "term_d3": {
+    "query": "customer~3",
+    "why": "~3 on the real word",
+    "status": 200,
+    "ms": 587,
+    "error": null,
+    "count": 23,
+    "returned": 23,
+    "rows_by_letters_off": {
+     "0": 21,
+     "2": 2
+    },
+    "closest_words": [
+     [
+      "customer",
+      21
+     ],
+     [
+      "customizer",
+      1
+     ],
+     [
+      "custom",
+      1
+     ]
+    ]
+   },
+   "typo3_bare_tilde": {
+    "query": "cstmr~",
+    "why": "~ alone (Lucene default is 2)",
+    "status": 200,
+    "ms": 496,
+    "error": null,
+    "count": 0,
+    "returned": 0,
+    "rows_by_letters_off": {},
+    "closest_words": []
+   },
+   "typo1_float": {
+    "query": "cstomer~0.8",
+    "why": "old float style",
+    "status": 200,
+    "ms": 586,
+    "error": null,
+    "count": 21,
+    "returned": 21,
+    "rows_by_letters_off": {
+     "0": 21
+    },
+    "closest_words": [
+     [
+      "customer",
+      21
+     ]
+    ]
+   },
+   "typo3_float": {
+    "query": "cstmr~0.5",
+    "why": "old float style, very loose",
+    "status": 200,
+    "ms": 555,
+    "error": null,
+    "count": 0,
+    "returned": 0,
+    "rows_by_letters_off": {},
+    "closest_words": []
+   },
+   "prefix4": {
+    "query": "cust*",
+    "why": "prefix wildcard",
+    "status": 200,
+    "ms": 558,
+    "error": null,
+    "count": 23,
+    "returned": 23,
+    "rows_by_letters_off": {
+     "0": 21,
+     "2": 2
+    },
+    "closest_words": [
+     [
+      "customer",
+      21
+     ],
+     [
+      "customizer",
+      1
+     ],
+     [
+      "custom",
+      1
+     ]
+    ]
+   },
+   "prefix5": {
+    "query": "custo*",
+    "why": "prefix wildcard",
+    "status": 200,
+    "ms": 602,
+    "error": null,
+    "count": 23,
+    "returned": 23,
+    "rows_by_letters_off": {
+     "0": 21,
+     "2": 2
+    },
+    "closest_words": [
+     [
+      "customer",
+      21
+     ],
+     [
+      "customizer",
+      1
+     ],
+     [
+      "custom",
+      1
+     ]
+    ]
+   },
+   "single_char": {
+    "query": "cu?tomer",
+    "why": "one letter wildcard",
+    "status": 200,
+    "ms": 594,
+    "error": null,
+    "count": 21,
+    "returned": 21,
+    "rows_by_letters_off": {
+     "0": 21
+    },
+    "closest_words": [
+     [
+      "customer",
+      21
+     ]
+    ]
+   },
+   "inner_star": {
+    "query": "c*r",
+    "why": "first and last letter",
+    "status": 200,
+    "ms": 1158,
+    "error": null,
+    "count": 700,
+    "returned": 200,
+    "rows_by_letters_off": {
+     "0": 3,
+     "3": 3,
+     "4": 108,
+     "5": 79,
+     "6": 7
+    },
+    "closest_words": [
+     [
+      "centocor",
+      56
+     ],
+     [
+      "cover",
+      31
+     ],
+     [
+      "csr",
+      18
+     ],
+     [
+      "letter",
+      15
+     ],
+     [
+      "center",
+      12
+     ],
+     [
+      "cber",
+      11
+     ],
+     [
+      "cancer",
+      9
+     ],
+     [
+      "computer",
+      5
+     ]
+    ]
+   },
+   "leading_star": {
+    "query": "*stomer",
+    "why": "leading wildcard, often turned off",
+    "status": 500,
+    "ms": 349,
+    "error": "{\"code\":\"GENERIC\",\"message\":\"Error unmarshaling return; nested exception is: \\n\\tjava.lang.ClassNotFoundException: org.apache.lucene.queryparser.classic.ParseException (no security manager: RMI class loader disabled)\",\"status\":\"INTERNAL_SERVER_ERROR\",\"subErrors\":null,\"timestamp\":\"19-10-2026 08:48:12",
+    "count": null,
+    "returned": null,
+    "rows_by_letters_off": {},
+    "closest_words": []
+   },
+   "regex": {
+    "query": "/cu.*er/",
+    "why": "regular expression",
+    "status": 200,
+    "ms": 638,
+    "error": null,
+    "count": 26,
+    "returned": 26,
+    "rows_by_letters_off": {
+     "0": 21,
+     "2": 1,
+     "3": 4
+    },
+    "closest_words": [
+     [
+      "customer",
+      21
+     ],
+     [
+      "cutler",
+      4
+     ],
+     [
+      "customizer",
+      1
+     ]
+    ]
+   },
+   "prefix_or_fuzzy": {
+    "query": "custo* OR cstmr~2",
+    "why": "prefix or 2 typos together",
+    "status": 200,
+    "ms": 601,
+    "error": null,
+    "count": 23,
+    "returned": 23,
+    "rows_by_letters_off": {
+     "0": 21,
+     "2": 2
+    },
+    "closest_words": [
+     [
+      "customer",
+      21
+     ],
+     [
+      "customizer",
+      1
+     ],
+     [
+      "custom",
+      1
+     ]
+    ]
+   },
+   "typo3_prefix": {
+    "query": "cstm*",
+    "why": "prefix of the 3 off form",
+    "status": 200,
+    "ms": 508,
+    "error": null,
+    "count": 0,
+    "returned": 0,
+    "rows_by_letters_off": {},
+    "closest_words": []
+   }
+  },
+  "global": {
+   "typo3_d3": {
+    "query": "cstmr~3",
+    "status": 200,
+    "ms": 47091,
+    "error": null,
+    "views": 17,
+    "hits": 93,
+    "rows_by_letters_off": {
+     "3": 29,
+     "4": 14,
+     "5": 12
+    }
+   },
+   "typo3_d2": {
+    "query": "cstmr~2",
+    "status": 200,
+    "ms": 45176,
+    "error": null,
+    "views": 17,
+    "hits": 93,
+    "rows_by_letters_off": {
+     "3": 29,
+     "4": 14,
+     "5": 12
+    }
+   },
+   "prefix5": {
+    "query": "custo*",
+    "status": 200,
+    "ms": 64731,
+    "error": null,
+    "views": 78,
+    "hits": 10543,
+    "rows_by_letters_off": {
+     "0": 76,
+     "1": 12,
+     "2": 117,
+     "3": 14,
+     "4": 31,
+     "5": 44,
+     "6": 15
+    }
+   },
+   "single_char": {
+    "query": "cu?tomer",
+    "status": 200,
+    "ms": 57183,
+    "error": null,
+    "views": 36,
+    "hits": 107,
+    "rows_by_letters_off": {
+     "0": 79,
+     "4": 7,
+     "5": 8,
+     "6": 2
+    }
+   }
+  }
+ },
+ "view": "gra_dh_urp_analysis_src.bv_rdh_grail_tbl_document_bak",
+ "duration_s": 282.8,
+ "total_calls": 24,
+ "run_at": "2026-10-19T08:51:49"
+}

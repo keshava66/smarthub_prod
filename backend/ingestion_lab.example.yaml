@@ -1,0 +1,244 @@
+# Ingestion Lab config. Copy to backend/ingestion_lab.yaml (or point INGESTION_LAB_CONFIG at it).
+# Edits are picked up without a restart. A typo keeps the last good version running and shows
+# the error on the page. Keep the real file out of git: it can hold SSH passwords.
+
+max_concurrent_runs: 4     # steps running at once on each server
+keep_days: 0               # 0 = keep run history forever; N = delete runs older than N days
+max_log_lines: 20000       # saved lines per run (a step can set its own); log_file has the full copy
+
+# In the folder picker, highlight folders that contain this file (a step can set its own).
+folder_marker: main.py
+
+# Where steps run. "local: true" is the portal server. Anything else is reached over SSH with
+# username + password (or password_env to read it from an environment variable, or key_file).
+# Pin the host key with host_key: leave it empty and the first run tells you what to paste in.
+# root is the folder people can pick run folders under on that server (symlinks are resolved
+# and checked; a list of folders works too).
+servers:
+  - id: rdi-1
+    name: RDI 1
+    local: true
+    root: /home/sa-prd-rdi-react-dev
+
+  - id: rdi-2
+    name: RDI 2
+    host: second-server.example.com
+    port: 22
+    username: sa-prd-rdi-react-dev
+    password: ""            # or password_env: RDI2_SSH_PASSWORD
+    host_key: ""
+    root: /home/sa-prd-rdi-react-dev
+
+# Bits reused by the steps below (YAML anchors). The Lab ignores this key.
+_shared:
+  haq_questions: &haq_questions
+    schema: haq_vector_embedding
+    table: rdh_haq_haq_query_question
+    id_column: id
+    text_column: question
+    vector_column: question_embedding
+    note_column: embedding_processing_note
+  dry_run: &dry_run {name: dry_run, label: Dry run, type: flag, flag: --dry-run, help: "Show what would be processed, no writes"}
+  no_embed: &no_embed {name: no_embed, label: Skip embeddings, type: flag, flag: --no-embed, help: Store chunks without vectors}
+
+# Each step is a command run in a folder. The person running it picks the folder (under the
+# server's root) on the page; give a step a fixed "workdir" only if it must always run in one place.
+# It runs as that server's user.
+#   command: a list, no shell. {name} puts an input in; a nested list is left out when its input
+#            is empty; a lone {flag} becomes the flag's text when ticked.
+#   shell:   one bash line instead; inputs arrive only as $IL_<NAME> env vars (quote them).
+#   "@python" as the program: the virtualenv (.venv, venv or env) in the folder the step runs
+#            in, or up to 2 folders above it. Never another python: with none found the step
+#            won't start, and the page offers to create one with a Python 3 found on that server.
+# Input types: text, secret (masked everywhere), select, number, date, flag. Text can't start
+# with '-' unless allow_dash is true; pattern restricts it further. advanced: true puts an
+# input under "More options". presets are one-click input sets.
+# type: profile builds an ingestion processing profile on the page (chunking, metadata fields,
+# embedding, source table). When the step runs it is written to a file in the server's spool
+# folder (~/.smarthub-ingestion, never the repo), {profile} becomes that file's path, and the
+# file is removed when the run ends. profile_mode: documents (plain ingest), extracted
+# (--rechunk-extracted) or existing (--embed-existing) picks what the page asks for;
+# templates: "profiles/*.json" lets people start from a profile file in the run folder.
+# A preset can hold a whole profile as a mapping.
+# Step options:
+#   one_at_a_time       true (default): one run per server | all_servers: one run anywhere,
+#                       for steps writing to a database the servers share | false: no limit
+#   timeout_minutes     default 240, 0 = none
+#   stop_signal         TERM (default) or INT (Ctrl-C, for scripts that finish in-flight work)
+#   stop_grace_seconds  default 15, then it's killed (the page offers Force stop meanwhile)
+#   pidfile             refuse to start while the pid in it is alive; holds the run's pid while it runs
+#   log_file            plain-text copy of the output, overwritten each run (needs one_at_a_time)
+#   log_keep            last (default) keeps the first 50 lines and the newest; first stops saving at max_log_lines
+#   nofile_limit        open-file limit (ulimit -n)
+# Relative paths (pidfile, log_file) are inside the folder the step runs in.
+steps:
+  - id: immbot-pipeline
+    name: Ingest documents
+    description: Crawl NAS or S3, extract, chunk, embed and load documents into Postgres
+    command:
+      - "@python"
+      - "-m"
+      - main
+      - ["--source", "{source}"]
+      - ["--doc-workers", "{doc_workers}"]
+      - ["--workers", "{workers}"]
+      - "{no_embed}"
+      - "{force}"
+      - "{retry_errors}"
+      - "{dry_run}"
+      - ["--max-files", "{max_files}"]
+      - ["--root", "{root}"]
+      - ["--file", "{file}"]
+      - ["--profile", "{profile}"]
+    inputs:
+      - name: source
+        label: Source
+        type: select
+        options: [{value: nas, label: NAS}, {value: s3, label: S3}]
+        required: false
+        placeholder: From config.ini
+        help: NAS or S3; leave as is to use config.ini
+      - name: doc_workers
+        label: Documents in parallel
+        type: number
+        integer: true
+        min: 1
+        max: 32
+        default: 8
+        help: Keep documents × OCR threads at 16 or less (Vision API limit).
+      - {name: workers, label: OCR threads per document, type: number, integer: true, min: 1, max: 16, default: 2}
+      - *no_embed
+      - {name: force, label: Force re-ingest, type: flag, flag: --force, help: Reprocess files even if unchanged}
+      - {name: retry_errors, label: Only retry failed documents, type: flag, flag: --retry-errors}
+      - {<<: *dry_run, help: "List what would be processed, no writes"}
+      - {name: max_files, label: Max files, type: number, integer: true, min: 1, required: false,
+         placeholder: No limit, help: For test runs}
+      - {name: root, label: NAS folder, type: text, required: false, max_length: 1024, advanced: true,
+         placeholder: From config.ini, help: Overrides docs_root (NAS only)}
+      - {name: file, label: Single file, type: text, required: false, max_length: 2048, advanced: true,
+         placeholder: "/mnt/nas/... or s3://bucket/key", help: Process just this file}
+      - name: profile
+        label: Processing profile
+        type: profile
+        required: false
+        advanced: true
+        profile_mode: documents
+        templates: "profiles/*.json"
+        help: Optional. Output goes to the profile_chunks_* tables, not the legacy RAG table
+    presets:
+      - name: Standard run
+        description: Source from config.ini, 8 documents x 2 OCR threads
+        inputs: {doc_workers: 8, workers: 2}
+      - name: S3, no embeddings
+        inputs: {source: s3, doc_workers: 16, workers: 1, no_embed: true}
+      - name: Retry failed docs
+        inputs: {retry_errors: true}
+      - name: Force re-ingest
+        inputs: {force: true}
+      - name: Dry run
+        inputs: {dry_run: true}
+      - name: Test 10 files
+        inputs: {max_files: 10, doc_workers: 2, no_embed: true}
+    one_at_a_time: all_servers
+    timeout_minutes: 0
+    stop_signal: INT          # main.py finishes in-flight documents on Ctrl-C
+    stop_grace_seconds: 900
+    pidfile: pipeline.pid
+    log_file: pipeline_immbot_new.log
+    nofile_limit: 65536
+
+  - id: rechunk-extracted
+    name: Re-chunk extracted text
+    description: Build profile chunks from text already in Postgres. No PDF reading or OCR
+    command:
+      - "@python"
+      - "-m"
+      - main
+      - --rechunk-extracted
+      - --profile
+      - "{profile}"
+      - ["--doc-workers", "{doc_workers}"]
+      - "{no_embed}"
+      - "{dry_run}"
+      - ["--max-files", "{max_files}"]
+    inputs:
+      - {name: profile, label: Processing profile, type: profile, profile_mode: extracted, templates: "profiles/*.json"}
+      - {name: doc_workers, label: Documents in parallel, type: number, integer: true, min: 1, max: 32, default: 4}
+      - *no_embed
+      - *dry_run
+      - {name: max_files, label: Max documents, type: number, integer: true, min: 1, required: false, placeholder: No limit}
+    presets:
+      - name: Dry run, 10 documents
+        inputs: {dry_run: true, max_files: 10}
+    one_at_a_time: all_servers
+    timeout_minutes: 0
+    stop_signal: INT
+    stop_grace_seconds: 600
+    log_file: rechunk_extracted.log
+    log_keep: last
+
+  - id: embed-existing
+    name: Backfill embeddings
+    description: Fill missing vectors in an existing table. Only NULL vectors are touched
+    command:
+      - "@python"
+      - "-m"
+      - main
+      - --embed-existing
+      - --profile
+      - "{profile}"
+      - "{dry_run}"
+      - ["--max-files", "{max_chunks}"]
+    inputs:
+      - {name: profile, label: Processing profile, type: profile, profile_mode: existing, templates: "profiles/*.json"}
+      - *dry_run
+      - {name: max_chunks, label: Max rows, type: number, integer: true, min: 1, required: false, placeholder: No limit}
+    presets:
+      - name: HAQ questions 3072
+        description: text-embedding-3-large into a vector(3072) column
+        inputs:
+          profile:
+            version: 1
+            existing_chunks: *haq_questions
+            embedding: {enabled: true, reuse_existing: true, batch_size: 16, progress_every_batches: 1,
+                        dimensions: 3072, model: text-embedding-3-large}
+      - name: HAQ questions 1536
+        description: text-embedding-3-small into a vector(1536) column
+        inputs:
+          profile:
+            version: 1
+            existing_chunks: *haq_questions
+            embedding: {enabled: true, reuse_existing: true, batch_size: 16, progress_every_batches: 1,
+                        dimensions: 1536, model: text-embedding-3-small}
+      - name: Dry run, 100 rows
+        description: Nothing written
+        inputs: {dry_run: true, max_chunks: 100}
+    one_at_a_time: all_servers
+    timeout_minutes: 0
+    stop_signal: TERM         # --embed-existing ignores Ctrl-C; each batch is its own transaction
+    stop_grace_seconds: 30
+    log_file: embed_existing.log
+    log_keep: last
+
+  - id: nas-scan
+    name: NAS inventory scan
+    description: List files on the NAS paths in [SCANNER] of this folder's config.ini into epod1.file_data
+    folder_marker: scanner.py
+    command: ["@python", scanner.py]
+    one_at_a_time: all_servers
+    timeout_minutes: 0
+    stop_grace_seconds: 30
+    log_keep: last
+
+  - id: pipeline-stats
+    name: Pipeline status
+    description: Document counts by status and the latest failures
+    command: ["@python", "-m", main, --stats]
+    one_at_a_time: false      # read-only
+    timeout_minutes: 10
+
+  - id: check-database
+    name: Check database
+    description: Connect to Postgres and create any missing tables
+    command: ["@python", "-c", 'from db import init_db; init_db(); print("Database connection OK, tables ready")']
+    timeout_minutes: 5

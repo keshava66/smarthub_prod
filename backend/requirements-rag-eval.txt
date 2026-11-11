@@ -1,0 +1,6 @@
+# Optional Agentic RAG evaluation dependencies.
+# Kept out of requirements.txt so production API startup is not coupled to
+# evaluator dependency/Pydantic versions. Deterministic SmartHub metrics work
+# without this file.
+ragas
+datasets

@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========== FONT DEFINITIONS ========== */
+/* JohnsonText Font Family */
+@font-face {
+  font-family: 'JohnsonText';
+  src: url('/fonts/JohnsonText-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JohnsonText';
+  src: url('/fonts/JohnsonText-LightItalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JohnsonText';
+  src: url('/fonts/JohnsonText-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JohnsonText';
+  src: url('/fonts/JohnsonText-RegularItalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JohnsonText';
+  src: url('/fonts/JohnsonText-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JohnsonText';
+  src: url('/fonts/JohnsonText-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* JohnsonDisplay Font Family */
+@font-face {
+  font-family: 'JohnsonDisplay';
+  src: url('/fonts/JohnsonDisplay-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JohnsonDisplay';
+  src: url('/fonts/JohnsonDisplay-LightItalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JohnsonDisplay';
+  src: url('/fonts/JohnsonDisplay-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JohnsonDisplay';
+  src: url('/fonts/JohnsonDisplay-RegularItalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JohnsonDisplay';
+  src: url('/fonts/JohnsonDisplay-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JohnsonDisplay';
+  src: url('/fonts/JohnsonDisplay-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ========== BASE STYLES ========== */
+@layer base {
+  body {
+    @apply bg-jj-gray-01 text-jj-black;
+    font-family: 'JohnsonText', Arial, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'JohnsonDisplay', Arial, sans-serif;
+  }
+}
+
+/* ========== REACT FLOW SPECIFIC ========== */
+/* Remove additional node background */
+.react-flow__node {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* Remove React Flow watermark */
+.react-flow__attribution {
+  display: none;
+}
+/* ========== TOAST ANIMATIONS ========== */
+/* Toast notification slide-in animation */
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}
+
+/* ========== DQE WELCOME SCREEN ANIMATIONS ========== */
+@keyframes dqe-pulse { 0% { transform: scale(1); opacity: .6; } 70% { transform: scale(2.1); opacity: 0; } 100% { opacity: 0; } }
+@keyframes dqe-ring { 0% { opacity: .55; transform: translateY(-50%) scale(1); } 50% { opacity: .85; transform: translateY(-50%) scale(1.018); } 100% { opacity: .55; transform: translateY(-50%) scale(1); } }
+@keyframes dqe-stream { 0% { transform: translateX(-100%); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateX(100%); opacity: 0; } }
+@keyframes dqe-vstream { 0% { transform: translateY(-100%); opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translateY(100%); opacity: 0; } }
+@keyframes dqe-float { 0% { transform: translateY(0) translateX(0); opacity: .15; } 30% { transform: translateY(-18px) translateX(10px); opacity: .45; } 65% { transform: translateY(-9px) translateX(-6px); opacity: .28; } 100% { transform: translateY(0) translateX(0); opacity: .15; } }
+@keyframes dqe-radar { from { transform: translateY(-50%) rotate(0deg); } to { transform: translateY(-50%) rotate(360deg); } }
+@keyframes dqe-orbit { from { transform: translateY(-50%) rotate(0deg); } to { transform: translateY(-50%) rotate(-360deg); } }
+@keyframes dqe-scan { 0% { top: -2px; opacity: 0; } 4% { opacity: .6; } 90% { opacity: .6; } 100% { top: 100%; opacity: 0; } }
+@keyframes dqe-r1 { 0% { opacity: 0; transform: translateY(22px); } 100% { opacity: 1; transform: none; } }
+@keyframes dqe-r2 { 0% { opacity: 0; transform: translateY(22px); } 100% { opacity: 1; transform: none; } }
+@keyframes dqe-r3 { 0% { opacity: 0; transform: translateY(18px); } 100% { opacity: 1; transform: none; } }
+@keyframes dqe-r4 { 0% { opacity: 0; transform: translateY(14px); } 100% { opacity: 1; transform: none; } }
+@keyframes dqe-line { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
+@keyframes dqe-fadein { from { opacity: 0; } to { opacity: 1; } }
