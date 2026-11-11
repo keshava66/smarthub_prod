@@ -87,6 +87,15 @@ const ROLE_DEFINITIONS = {
   }
 };
 
+// Pages prod has. The backend grants more (Fuzzy Match, RAG, ...) but those
+// pages aren't built here, so their permissions stay off.
+const PROD_PERMISSIONS = new Set([
+  'viewDashboard', 'viewDQE', 'viewITChecks', 'runITChecks',
+  'viewBusinessChecks', 'runBDCOperations', 'viewBDCSuperuser',
+  'viewAudit', 'viewUserManagement', 'manageUsers', 'manageRoles',
+  'manageDataAPIExports', 'viewPGindexer', 'buildPGindexer',
+]);
+
 const RBACContext = createContext();
 
 export const RBACProvider = ({ children }) => {
@@ -173,7 +182,7 @@ export const RBACProvider = ({ children }) => {
 
   // Check if user has specific permission
   const hasPermission = (permission) => {
-    if (serverPermissions) return serverPermissions[permission] === true;
+    if (serverPermissions) return PROD_PERMISSIONS.has(permission) && serverPermissions[permission] === true;
     const roleDefinition = getRoleDefinition();
     return roleDefinition.permissions[permission] === true;
   };
